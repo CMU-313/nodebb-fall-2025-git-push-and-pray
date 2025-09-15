@@ -81,6 +81,9 @@ User.getUsersFromSet = async function (set, uid, start) {
 		start = 0;
 	}
 
+	const uids = await User.getUidsFromSet(set, start, stop);
+	return await User.getUsers(uids, uid);
+};
 
 User.getUsersWithFields = async function (uids, fields, uid) {
 	let results = await plugins.hooks.fire('filter:users.addFields', { fields: fields });
