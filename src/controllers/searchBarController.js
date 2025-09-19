@@ -32,33 +32,40 @@ async function normalizeAndCheck(searchIn, uid, userPrivileges) {
  * Run search and normalize output
  */
 async function runSearch(req, res, searchIn, searchData) {
-	const filters = await searchBarModel.createSearchFilters(searchData);
-	const rawResults = await searchBarModel.searchPosts(filters);
-  
-	const posts = (rawResults.posts || []).map((p) => ({
-	  pid: p.pid,
-	  tid: p.tid,
-	  title: p.topic?.title || p.title || null,
-	  content: p.content ? p.content.replace(/<[^>]+>/g, '') : null, // strip HTML tags
-	  username: p.user?.username || null,
-	  category: p.category?.name || null,
-	  timestamp: p.timestamp || null,
-	  url: p.pid ? `/post/${p.pid}` : `/topic/${p.tid}`, // add URL
-	}));
-  
-	return res.json({
-	  success: true,
-	  data: {
-		posts,
-		meta: {
-		  matchCount: posts.length,
-		  pageCount: Math.max(1, Math.ceil(posts.length / filters.itemsPerPage)),
-		  searchTime: rawResults.searchTime,
-		  filters,
-		},
-	  },
-	});
-  }
+  const filters = await searchBarModel.createSearchFilters(searchData);
+  const rawResults = await searchBarModel.searchPosts(filters);
+
+  // Deduplicate by pid
+  const seen = new Set();
+  const posts = (rawResults.posts || [])
+    .filter(p => {
+      if (seen.has(p.pid)) return false;
+      seen.add(p.pid);
+      return true;
+    })
+    .map(p => ({
+      pid: p.pid,
+      tid: p.tid,
+      title: p.topic?.title || p.title || null,
+      content: p.content ? p.content.replace(/<[^>]+>/g, '') : null,
+      username: p.user?.username || null,
+      category: p.category?.name || null,
+      timestamp: p.timestamp || null,
+      url: p.pid ? `/post/${p.pid}` : `/topic/${p.tid}`,
+    }));
+
+  return res.json({
+    success: true,
+    data: {
+      posts,
+      matchCount: posts.length,
+      pageCount: Math.max(1, Math.ceil(posts.length / filters.itemsPerPage)),
+      searchTime: rawResults.searchTime,
+      filters,
+    },
+  });
+}
+
   
 
 
