@@ -25,6 +25,7 @@ Controllers.popular = require('./popular');
 Controllers.top = require('./top');
 Controllers.tags = require('./tags');
 Controllers.search = require('./search');
+Controllers.searchBar = require('./searchBarController');
 Controllers.user = require('./user');
 Controllers.users = require('./users');
 Controllers.groups = require('./groups');
@@ -376,3 +377,5 @@ Controllers.termsOfUse = async function (req, res, next) {
 		termsOfUse: termsOfUse.postData.content,
 	});
 };
+
+module.exports = Controllers;
