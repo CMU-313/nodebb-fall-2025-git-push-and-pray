@@ -28,32 +28,43 @@ async function normalizeAndCheck(searchIn, uid, userPrivileges) {
   return { searchIn, allowed };
 }
 
+/**
+ * Run search and normalize output
+ */
 async function runSearch(req, res, searchIn, searchData) {
-  const filters = await searchBarModel.createSearchFilters(searchData);
-  const rawResults = await searchBarModel.searchPosts(filters);
+	const filters = await searchBarModel.createSearchFilters(searchData);
+	const rawResults = await searchBarModel.searchPosts(filters);
+  
+	const posts = (rawResults.posts || []).map((p) => ({
+	  pid: p.pid,
+	  tid: p.tid,
+	  title: p.topic?.title || p.title || null,
+	  content: p.content ? p.content.replace(/<[^>]+>/g, '') : null, // strip HTML tags
+	  username: p.user?.username || null,
+	  category: p.category?.name || null,
+	  timestamp: p.timestamp || null,
+	  url: p.pid ? `/post/${p.pid}` : `/topic/${p.tid}`, // add URL
+	}));
+  
+	return res.json({
+	  success: true,
+	  data: {
+		posts,
+		meta: {
+		  matchCount: posts.length,
+		  pageCount: Math.max(1, Math.ceil(posts.length / filters.itemsPerPage)),
+		  searchTime: rawResults.searchTime,
+		  filters,
+		},
+	  },
+	});
+  }
+  
 
-  const posts = (rawResults.posts || []).map((p) => ({
-    pid: p.pid,
-    tid: p.tid,
-    title: p.topic?.title || p.title || null,
-    content: p.content || null,
-    username: p.user?.username || null,
-    category: p.category?.name || null,
-    timestamp: p.timestamp || null,
-  }));
 
-  return res.json({
-    success: true,
-    data: {
-      posts,
-      matchCount: posts.length,
-      pageCount: Math.max(1, Math.ceil(posts.length / filters.itemsPerPage)),
-      filters,
-      searchTime: rawResults.searchTime,
-    },
-  });
-}
-
+/**
+ * GET /api/search
+ */
 searchBarController.search = async function (req, res) {
   try {
     const userPrivileges = await utils.promiseParallel({
@@ -80,6 +91,9 @@ searchBarController.search = async function (req, res) {
   }
 };
 
+/**
+ * POST /api/search/advanced
+ */
 searchBarController.advancedSearch = async function (req, res) {
   try {
     const userPrivileges = await utils.promiseParallel({
@@ -106,6 +120,9 @@ searchBarController.advancedSearch = async function (req, res) {
   }
 };
 
+/**
+ * GET /api/search/suggestions
+ */
 searchBarController.getSuggestions = async function (req, res) {
   try {
     const query = req.query.q || req.query.query || '';
@@ -116,6 +133,9 @@ searchBarController.getSuggestions = async function (req, res) {
   }
 };
 
+/**
+ * GET /api/search/history
+ */
 searchBarController.getSearchHistory = async function (req, res) {
   try {
     const limit = Math.min(parseInt(req.query.limit, 10) || 10, 50);
@@ -128,6 +148,9 @@ searchBarController.getSearchHistory = async function (req, res) {
   }
 };
 
+/**
+ * DELETE /api/search/history
+ */
 searchBarController.clearSearchHistory = async function (req, res) {
   try {
     if (!req.uid) return res.json({ success: true, data: [] });
