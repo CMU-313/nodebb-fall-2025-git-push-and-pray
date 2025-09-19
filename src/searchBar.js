@@ -9,20 +9,15 @@ async function createSearchFilters(queryData = {}) {
 
   return {
     query: String(queryData.query || '').trim(),
-    searchIn: queryData.searchIn || 'titlesposts', // can be titles, posts, both
-    page: queryData.page || 1,
-    itemsPerPage: queryData.itemsPerPage || 10,
+    searchIn: queryData.searchIn || 'titlesposts',
+    page: parseInt(queryData.page, 10) || 1,
+    itemsPerPage: parseInt(queryData.itemsPerPage, 10) || 10,
     uid: queryData.uid || 0,
   };
 }
 
-/**
- * Run a search against NodeBB's search system (dbsearch, solr, etc.)
- */
 async function searchPosts(filters) {
   const start = process.hrtime();
-
-  // delegate directly to NodeBB's core search
   const results = await coreSearch.search(filters);
 
   const elapsed = process.hrtime(start);
@@ -35,13 +30,11 @@ async function searchPosts(filters) {
   };
 }
 
-/**
- * Simple suggestion mock (wire up later if needed)
- */
 async function getSearchSuggestions(query) {
-  if (!query || query.length < 2) return { suggestions: [] };
+  if (!query || query.length < 2) {
+    return { suggestions: [] };
+  }
 
-  // could also call coreSearch or db to get real suggestions
   return {
     recent: [],
     popular: [],

@@ -8,9 +8,6 @@ const db = require('../database');
 const searchBarController = {};
 module.exports = searchBarController;
 
-/**
- * Normalize searchIn and check privileges
- */
 async function normalizeAndCheck(searchIn, uid, userPrivileges) {
   const valid = ['titles', 'posts', 'titlesposts', 'users', 'categories', 'tags', 'bookmarks'];
   if (!valid.includes(searchIn)) searchIn = 'titlesposts';
@@ -18,7 +15,7 @@ async function normalizeAndCheck(searchIn, uid, userPrivileges) {
   const isGuest = !uid || uid === 0;
 
   if (isGuest) {
-    const guestAllowed = ['titles', 'posts', 'titlesposts', 'bookmarks', 'categories'];
+    const guestAllowed = ['titles', 'posts', 'titlesposts', 'categories'];
     return { searchIn, allowed: guestAllowed.includes(searchIn) };
   }
 
@@ -33,13 +30,28 @@ async function normalizeAndCheck(searchIn, uid, userPrivileges) {
 
 async function runSearch(req, res, searchIn, searchData) {
   const filters = await searchBarModel.createSearchFilters(searchData);
-  const results = await searchBarModel.searchPosts(filters);
+  const rawResults = await searchBarModel.searchPosts(filters);
 
-  if (filters.query?.length > 2) {
-    await recordSearch(filters);
-  }
+  const posts = (rawResults.posts || []).map((p) => ({
+    pid: p.pid,
+    tid: p.tid,
+    title: p.topic?.title || p.title || null,
+    content: p.content || null,
+    username: p.user?.username || null,
+    category: p.category?.name || null,
+    timestamp: p.timestamp || null,
+  }));
 
-  return res.json({ success: true, data: results });
+  return res.json({
+    success: true,
+    data: {
+      posts,
+      matchCount: posts.length,
+      pageCount: Math.max(1, Math.ceil(posts.length / filters.itemsPerPage)),
+      filters,
+      searchTime: rawResults.searchTime,
+    },
+  });
 }
 
 searchBarController.search = async function (req, res) {
@@ -50,8 +62,15 @@ searchBarController.search = async function (req, res) {
       'search:tags': privileges.global.can('search:tags', req.uid),
     });
 
-    const { searchIn, allowed } = await normalizeAndCheck(req.query.searchIn || 'titlesposts', req.uid, userPrivileges);
-    if (!allowed) return res.status(403).json({ success: false, error: 'Insufficient privileges' });
+    const { searchIn, allowed } = await normalizeAndCheck(
+      req.query.searchIn || 'titlesposts',
+      req.uid,
+      userPrivileges,
+    );
+
+    if (!allowed) {
+      return res.status(403).json({ success: false, error: 'Insufficient privileges' });
+    }
 
     const searchData = { ...req.query, searchIn, uid: req.uid || 0 };
     return await runSearch(req, res, searchIn, searchData);
@@ -69,8 +88,15 @@ searchBarController.advancedSearch = async function (req, res) {
       'search:tags': privileges.global.can('search:tags', req.uid),
     });
 
-    const { searchIn, allowed } = await normalizeAndCheck(req.body.searchIn || 'titlesposts', req.uid, userPrivileges);
-    if (!allowed) return res.status(403).json({ success: false, error: 'Insufficient privileges' });
+    const { searchIn, allowed } = await normalizeAndCheck(
+      req.body.searchIn || 'titlesposts',
+      req.uid,
+      userPrivileges,
+    );
+
+    if (!allowed) {
+      return res.status(403).json({ success: false, error: 'Insufficient privileges' });
+    }
 
     const searchData = { ...req.body, searchIn, uid: req.uid || 0 };
     return await runSearch(req, res, searchIn, searchData);
@@ -111,20 +137,3 @@ searchBarController.clearSearchHistory = async function (req, res) {
     res.status(500).json({ success: false, error: 'Failed to clear history', message: err.message });
   }
 };
-
-async function recordSearch(filters) {
-  const { query, uid } = filters;
-  if (!query || query.length < 3) return;
-
-  const cleaned = query.trim().toLowerCase().slice(0, 255);
-  await db.sortedSetIncrBy('searches:all', 1, cleaned);
-
-  const day = new Date();
-  day.setHours(0, 0, 0, 0);
-  await db.sortedSetIncrBy(`searches:${day.getTime()}`, 1, cleaned);
-
-  if (uid) {
-    await db.sortedSetAdd(`user:${uid}:searches`, Date.now(), cleaned);
-    await db.sortedSetRemoveRangeByRank(`user:${uid}:searches`, 0, -101);
-  }
-}
