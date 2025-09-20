@@ -1,6 +1,8 @@
 
 we utilize plugin db-search from NodeBB with nodebb-plugin-dbsearch
 - npm install nodebb-plugin-dbsearch
+
+
 The backend search follows a MVC structure without the implemented View:
  - model: src/searchBar
  - controller: src/controller/searchBarController
@@ -15,3 +17,7 @@ middleware logic:
 RBAC:
  - guests are given basic search access: titles, posts, titlesposts, categories; however they cannot search using tags, users, bookmarks.
  - Logged-in users are given full permission for search
+
+
+to test if query is working format like this with query=<YOUR INPUT>
+: curl -s "http://localhost:4567/api/search?query=demo&searchIn=titlesposts&page=1&itemsPerPage=5" | jq
