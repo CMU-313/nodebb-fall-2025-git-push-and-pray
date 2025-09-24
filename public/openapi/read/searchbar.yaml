@@ -1,79 +1,79 @@
-# get:
-#   summary: Simplified searchbar search for posts
-#   tags:
-#     - search
-#   parameters:
-#     - in: query
-#       name: term
-#       schema:
-#         type: string
-#       required: true
-#       example: welcome
-#     - in: query
-#       name: in
-#       schema:
-#         type: string
-#         enum: [titles, posts, titlesposts]
-#       required: false
-#       example: titlesposts
-#     - in: query
-#       name: page
-#       schema:
-#         type: integer
-#       required: false
-#       example: 1
-#     - in: query
-#       name: itemsPerPage
-#       schema:
-#         type: integer
-#       required: false
-#       example: 10
-#   responses:
-#     "200":
-#       description: Successful search response
-#       content:
-#         application/json:
-#           schema:
-#             type: object
-#             properties:
-#               success:
-#                 type: boolean
-#               posts:
-#                 type: array
-#                 items:
-#                   type: object
-#                   properties:
-#                     pid:
-#                       type: integer
-#                     tid:
-#                       type: integer
-#                     title:
-#                       type: string
-#                       nullable: true
-#                     content:
-#                       type: string
-#                       nullable: true
-#                     sourceContent:
-#                       type: string
-#                       nullable: true
-#                     username:
-#                       type: string
-#                       nullable: true
-#                     category:
-#                       type: string
-#                       nullable: true
-#                     timestamp:
-#                       type: integer
-#                       nullable: true
-#                     deleted:
-#                       type: integer
-#                     upvotes:
-#                       type: integer
-#                     url:
-#                       type: string
-#               matchCount:
-#                 type: integer
-#               pageCount:
-#                 type: integer
-#               searchTime:
-#                 type: number
+get:
+  summary: Simplified searchbar search for posts
+  tags:
+    - search
+  parameters:
+    - in: query
+      name: term
+      schema:
+        type: string
+      required: true
+      example: welcome
+    - in: query
+      name: in
+      schema:
+        type: string
+        enum: [titles, posts, titlesposts]
+      required: false
+      example: titlesposts
+    - in: query
+      name: page
+      schema:
+        type: integer
+      required: false
+      example: 1
+    - in: query
+      name: itemsPerPage
+      schema:
+        type: integer
+      required: false
+      example: 10
+  responses:
+    "200":
+      description: Successful search response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              posts:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    pid:
+                      type: integer
+                    tid:
+                      type: integer
+                    title:
+                      type: string
+                      nullable: true
+                    content:
+                      type: string
+                      nullable: true
+                    sourceContent:
+                      type: string
+                      nullable: true
+                    username:
+                      type: string
+                      nullable: true
+                    category:
+                      type: string
+                      nullable: true
+                    timestamp:
+                      type: integer
+                      nullable: true
+                    deleted:
+                      type: integer
+                    upvotes:
+                      type: integer
+                    url:
+                      type: string
+              matchCount:
+                type: integer
+              pageCount:
+                type: integer
+              searchTime:
+                type: number
