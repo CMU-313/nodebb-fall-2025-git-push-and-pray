@@ -72,15 +72,10 @@ User.getUidsFromSet = async function (set, start, stop) {
 	return await db.getSortedSetRevRange(set, start, stop);
 };
 
-User.getUsersFromSet = async function (set, uid, start) {
-	let stop = -1; // default
-	if (arguments.length > 3 && arguments[3] !== undefined) {
-		stop = arguments[3]; // use the 4th arg if provided
-	}
-	if (start === undefined) {
-		start = 0;
-	}
-
+User.getUsersFromSet = async function (set, uid, start, stop) {
+	const uids = await User.getUidsFromSet(set, start, stop);
+	return await User.getUsers(uids, uid);
+};
 
 User.getUsersWithFields = async function (uids, fields, uid) {
 	let results = await plugins.hooks.fire('filter:users.addFields', { fields: fields });
