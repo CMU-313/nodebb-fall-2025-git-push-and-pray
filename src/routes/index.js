@@ -35,15 +35,7 @@ _mounts.main = (app, middleware, controllers) => {
 	setupPageRoute(app, '/compose', [], controllers.composer.get);
 	setupPageRoute(app, '/confirm/:code', [], controllers.confirmEmail);
 	setupPageRoute(app, '/outgoing', [], controllers.outgoing);
-	setupPageRoute(app, '/search', [], controllers.search.search);
-	
-	// Search Bar API routes (direct on app, not through API router)
-	// app.get('/api/search', controllers.searchBar.search);
-	// app.get('/api/search/suggestions', controllers.searchBar.getSuggestions);
-	// app.post('/api/search/advanced', controllers.searchBar.advancedSearch);
-	// app.get('/api/search/quick', controllers.searchBar.quickSearch);
-	// app.get('/api/search/history', controllers.searchBar.getSearchHistory);
-	// app.delete('/api/search/history', controllers.searchBar.clearSearchHistory);
+	setupPageRoute(app, '/search', [], controllers.search.search);	
 	
 	setupPageRoute(app, '/reset/:code?', [middleware.delayLoading], controllers.reset);
 	setupPageRoute(app, '/tos', [], controllers.termsOfUse);
