@@ -21,3 +21,4 @@ RBAC:
 
 to test if query is working format like this with query=<YOUR INPUT>
 : curl -s "http://localhost:4567/api/search?query=demo&searchIn=titlesposts&page=1&itemsPerPage=5" | jq
+curl -s "http://localhost:4567/api/search?query=javascript&searchIn=titlesposts&page=1&itemsPerPage=5" | jq
