@@ -8,146 +8,89 @@ const db = require('../database');
 const searchBarController = {};
 module.exports = searchBarController;
 
-async function normalizeAndCheck(searchIn, uid, userPrivileges) {
-  const valid = ['titles', 'posts', 'titlesposts', 'users', 'categories', 'tags', 'bookmarks'];
-  if (!valid.includes(searchIn)) searchIn = 'titlesposts';
+const VALID = ['titles', 'posts', 'titlesposts', 'users', 'categories', 'tags', 'bookmarks'];
+const GUEST_OK = ['titles', 'posts', 'titlesposts', 'categories'];
 
-  const isGuest = !uid || uid === 0;
+async function normalize(searchIn, uid, privs) {
+  searchIn = VALID.includes(searchIn) ? searchIn : 'titlesposts';
 
-  if (isGuest) {
-    const guestAllowed = ['titles', 'posts', 'titlesposts', 'categories'];
-    return { searchIn, allowed: guestAllowed.includes(searchIn) };
-  }
+  if (!uid) return { searchIn, allowed: GUEST_OK.includes(searchIn) };
 
   const allowed =
-    (searchIn === 'users' && userPrivileges['search:users']) ||
-    (searchIn === 'tags' && userPrivileges['search:tags']) ||
-    searchIn === 'categories' ||
-    ['titles', 'titlesposts', 'posts', 'bookmarks'].includes(searchIn);
+    searchIn === 'users' ? privs['search:users'] :
+    searchIn === 'tags' ? privs['search:tags'] :
+    searchIn === 'categories' || ['titles', 'titlesposts', 'posts', 'bookmarks'].includes(searchIn);
 
   return { searchIn, allowed };
 }
 
-/**
- * Run search and normalize output
- */
-async function runSearch(req, res, searchIn, searchData) {
+async function runSearch(res, searchData) {
   const filters = await searchBarModel.createSearchFilters(searchData);
-  const rawResults = await searchBarModel.searchPosts(filters);
+  const raw = await searchBarModel.searchPosts(filters);
 
-  // Deduplicate by pid
   const seen = new Set();
-  const posts = (rawResults.posts || [])
-    .filter(p => {
-      if (seen.has(p.pid)) return false;
-      seen.add(p.pid);
-      return true;
-    })
+  const posts = (raw.posts || [])
+    .filter(p => !seen.has(p.pid) && seen.add(p.pid))
     .map(p => ({
       pid: p.pid,
       tid: p.tid,
       title: p.topic?.title || p.title || null,
-      content: p.content ? p.content.replace(/<[^>]+>/g, '') : null,
+      content: p.content?.replace(/<[^>]+>/g, '') || null,
       username: p.user?.username || null,
       category: p.category?.name || null,
       timestamp: p.timestamp || null,
       url: p.pid ? `/post/${p.pid}` : `/topic/${p.tid}`,
     }));
 
-  return res.json({
+  res.json({
     success: true,
     data: {
       posts,
       matchCount: posts.length,
       pageCount: Math.max(1, Math.ceil(posts.length / filters.itemsPerPage)),
-      searchTime: rawResults.searchTime,
+      searchTime: raw.searchTime,
       filters,
     },
   });
 }
 
-  
-
-
-/**
- * GET /api/search
- */
-searchBarController.search = async function (req, res) {
+async function handleSearch(req, res, source = 'query') {
   try {
-    const userPrivileges = await utils.promiseParallel({
+    const privs = await utils.promiseParallel({
       'search:users': privileges.global.can('search:users', req.uid),
       'search:content': privileges.global.can('search:content', req.uid),
       'search:tags': privileges.global.can('search:tags', req.uid),
     });
 
-    const { searchIn, allowed } = await normalizeAndCheck(
-      req.query.searchIn || 'titlesposts',
-      req.uid,
-      userPrivileges,
-    );
+    const { searchIn, allowed } = await normalize(req[source].searchIn || 'titlesposts', req.uid, privs);
+    if (!allowed) return res.status(403).json({ success: false, error: 'Insufficient privileges' });
 
-    if (!allowed) {
-      return res.status(403).json({ success: false, error: 'Insufficient privileges' });
-    }
-
-    const searchData = { ...req.query, searchIn, uid: req.uid || 0 };
-    return await runSearch(req, res, searchIn, searchData);
+    const searchData = { ...req[source], searchIn, uid: req.uid || 0 };
+    return await runSearch(res, searchData);
   } catch (err) {
     console.error('Search error:', err);
     res.status(500).json({ success: false, error: 'Search failed', message: err.message });
   }
-};
+}
 
-/**
- * POST /api/search/advanced
- */
-searchBarController.advancedSearch = async function (req, res) {
+// Routes
+searchBarController.search = (req, res) => handleSearch(req, res, 'query');
+searchBarController.advancedSearch = (req, res) => handleSearch(req, res, 'body');
+
+searchBarController.getSuggestions = async (req, res) => {
   try {
-    const userPrivileges = await utils.promiseParallel({
-      'search:users': privileges.global.can('search:users', req.uid),
-      'search:content': privileges.global.can('search:content', req.uid),
-      'search:tags': privileges.global.can('search:tags', req.uid),
-    });
-
-    const { searchIn, allowed } = await normalizeAndCheck(
-      req.body.searchIn || 'titlesposts',
-      req.uid,
-      userPrivileges,
-    );
-
-    if (!allowed) {
-      return res.status(403).json({ success: false, error: 'Insufficient privileges' });
-    }
-
-    const searchData = { ...req.body, searchIn, uid: req.uid || 0 };
-    return await runSearch(req, res, searchIn, searchData);
-  } catch (err) {
-    console.error('Advanced search error:', err);
-    res.status(500).json({ success: false, error: 'Advanced search failed', message: err.message });
-  }
-};
-
-/**
- * GET /api/search/suggestions
- */
-searchBarController.getSuggestions = async function (req, res) {
-  try {
-    const query = req.query.q || req.query.query || '';
-    const suggestions = await searchBarModel.getSearchSuggestions(query, req.uid || 0);
-    res.json({ success: true, data: { suggestions, query } });
+    const q = req.query.q || req.query.query || '';
+    const suggestions = await searchBarModel.getSearchSuggestions(q, req.uid || 0);
+    res.json({ success: true, data: { suggestions, query: q } });
   } catch (err) {
     res.status(500).json({ success: false, error: 'Failed to get suggestions', message: err.message });
   }
 };
 
-/**
- * GET /api/search/history
- */
-searchBarController.getSearchHistory = async function (req, res) {
+searchBarController.getSearchHistory = async (req, res) => {
   try {
-    const limit = Math.min(parseInt(req.query.limit, 10) || 10, 50);
     if (!req.uid) return res.json({ success: true, data: [] });
-
+    const limit = Math.min(parseInt(req.query.limit, 10) || 10, 50);
     const history = await db.getSortedSetRevRange(`user:${req.uid}:searches`, 0, limit - 1);
     res.json({ success: true, data: history });
   } catch (err) {
@@ -155,13 +98,9 @@ searchBarController.getSearchHistory = async function (req, res) {
   }
 };
 
-/**
- * DELETE /api/search/history
- */
-searchBarController.clearSearchHistory = async function (req, res) {
+searchBarController.clearSearchHistory = async (req, res) => {
   try {
-    if (!req.uid) return res.json({ success: true, data: [] });
-    await db.delete(`user:${req.uid}:searches`);
+    if (req.uid) await db.delete(`user:${req.uid}:searches`);
     res.json({ success: true, data: { message: 'Search history cleared' } });
   } catch (err) {
     res.status(500).json({ success: false, error: 'Failed to clear history', message: err.message });

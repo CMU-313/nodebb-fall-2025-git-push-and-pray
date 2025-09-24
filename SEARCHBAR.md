@@ -4,8 +4,6 @@ We implemented backend search functionality using NodeBB’s plugin nodebb-plugi
 Installed via:
     npm install nodebb-plugin-dbsearch
 
-Must turn on DBsearch Plugin from server manually via admin settings
-
 Architecture (MVC without View):
     Model: src/searchBar/ – contains business logic and integrates with src/search.js functions.
     Controller: src/controller/searchBarController.js – orchestrates requests between routes and the model.
