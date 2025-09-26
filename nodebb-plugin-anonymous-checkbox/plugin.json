@@ -1,65 +1,30 @@
 {
     "id": "nodebb-plugin-anonymous-checkbox",
     "name": "Anonymous Posts",
-    "description": "Allows users to post anonymously",
+    "description": "Mask author display name as Anonymous when flagged",
     "version": "1.0.0",
     "library": "./library.js",
     "hooks": [
-      {
-        "hook": "filter:post.create",
-        "method": "filterPostCreate",
-        "priority": 5
-      },
-      {
-        "hook": "filter:post.getFields",
-        "method": "addAnonField",
-        "priority": 5
-        },
-      {
-        "hook": "action:post.save",
-        "method": "actionPostSave",
-        "priority": 5
-      },
-      {
-        "hook": "filter:topic.create", 
-        "method": "filterTopicCreate",
-        "priority": 5
-      },
-      {
-        "hook": "filter:posts.get",
-        "method": "filterPostsGet",
-        "priority": 10
-      },
-      {
-        "hook": "filter:post.getPostData",
-        "method": "filterPostGetPostData",
-        "priority": 10
-      },
-      {
-        "hook": "filter:post.get",
-        "method": "filterPostGet",
-        "priority": 10
-      },
-      {
-        "hook": "filter:topics.get",
-        "method": "filterTopicsGet", 
-        "priority": 10
-      },
-      {
-        "hook": "filter:composer.build",
-        "method": "filterComposerBuild",
-        "priority": 5
-      }
+      { "hook": "filter:post.create",        "method": "filterPostCreate",      "priority": 5  },
+      { "hook": "action:post.save",          "method": "actionPostSave",        "priority": 5  },
+  
+      { "hook": "filter:post.getFields",     "method": "addAnonField",          "priority": 5  },
+  
+      { "hook": "filter:post.get",           "method": "filterPostGet",         "priority": 10 },
+  
+      { "hook": "filter:topic.getPosts",     "method": "maskPostsList_topic",   "priority": 10 },
+      { "hook": "filter:post.getPosts",      "method": "maskPostsList_post",    "priority": 10 },
+  
+      { "hook": "filter:topics.addPostData", "method": "maskAfterAddPostData",  "priority": 200 },
+  
+      { "hook": "filter:composer.build",     "method": "filterComposerBuild",   "priority": 5  }
     ],
-    "staticDirs": {
-      "static": "./static"
-    },
-    "css": [
-      "static/style.css"
-    ],
+    "staticDirs": { "static": "./static" },
+    "css": ["static/style.css"],
     "scripts": [
       "static/lib/composer-anonymous.js",
       "static/lib/main.js"
     ],
     "compatibility": "^3.0.0"
-}
+  }
+  
