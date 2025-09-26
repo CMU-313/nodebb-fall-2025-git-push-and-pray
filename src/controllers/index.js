@@ -26,6 +26,7 @@ Controllers.top = require('./top');
 Controllers.tags = require('./tags');
 Controllers.search = require('./search');
 Controllers.searchBar = require('./searchBarController');
+Controllers.searchbar = require('./searchbar');
 Controllers.user = require('./user');
 Controllers.users = require('./users');
 Controllers.groups = require('./groups');
