@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-anonymous-checkbox",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "main": "library.js",
   "nbbpm": { "compatibility": "^3.0.0" }
 }

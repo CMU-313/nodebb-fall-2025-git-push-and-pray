@@ -1,13 +1,65 @@
 {
     "id": "nodebb-plugin-anonymous-checkbox",
-    "name": "Anonymous Checkbox",
-    "library": "library.js",
+    "name": "Anonymous Posts",
+    "description": "Allows users to post anonymously",
+    "version": "1.0.0",
+    "library": "./library.js",
     "hooks": [
-      { "hook": "static:app.load", "method": "init", "priority": 10 },
-      { "hook": "filter:post.create", "method": "filterPostData", "priority": 5 },
-      { "hook": "action:post.create", "method": "afterPostCreate", "priority": 10 },
-      { "hook": "filter:post.get", "method": "maskPost", "priority": 10 },
-      { "hook": "filter:posts.get", "method": "maskPosts", "priority": 10 }
+      {
+        "hook": "filter:post.create",
+        "method": "filterPostCreate",
+        "priority": 5
+      },
+      {
+        "hook": "filter:post.getFields",
+        "method": "addAnonField",
+        "priority": 5
+        },
+      {
+        "hook": "action:post.save",
+        "method": "actionPostSave",
+        "priority": 5
+      },
+      {
+        "hook": "filter:topic.create", 
+        "method": "filterTopicCreate",
+        "priority": 5
+      },
+      {
+        "hook": "filter:posts.get",
+        "method": "filterPostsGet",
+        "priority": 10
+      },
+      {
+        "hook": "filter:post.getPostData",
+        "method": "filterPostGetPostData",
+        "priority": 10
+      },
+      {
+        "hook": "filter:post.get",
+        "method": "filterPostGet",
+        "priority": 10
+      },
+      {
+        "hook": "filter:topics.get",
+        "method": "filterTopicsGet", 
+        "priority": 10
+      },
+      {
+        "hook": "filter:composer.build",
+        "method": "filterComposerBuild",
+        "priority": 5
+      }
     ],
-    "scripts": ["static/lib/composer-anonymous.js"]
-  }
+    "staticDirs": {
+      "static": "./static"
+    },
+    "css": [
+      "static/style.css"
+    ],
+    "scripts": [
+      "static/lib/composer-anonymous.js",
+      "static/lib/main.js"
+    ],
+    "compatibility": "^3.0.0"
+}

@@ -1,0 +1,72 @@
+/* Anonymous Post Plugin Styles */
+
+.anonymous-checkbox-wrapper {
+    margin: 10px 0;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f8f9fa;
+}
+
+.anonymous-checkbox-wrapper .form-check {
+    margin: 0;
+}
+
+.anonymous-checkbox-wrapper .form-check-label {
+    font-weight: 500;
+    color: #495057;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.anonymous-checkbox-wrapper .form-check-label:hover {
+    color: #007bff;
+}
+
+.anonymous-checkbox-wrapper .form-check-input {
+    margin-top: 0;
+}
+
+.anonymous-checkbox-wrapper .fa {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+/* Anonymous mode styling */
+.composer.anonymous-mode {
+    border-left: 4px solid #ffc107;
+}
+
+.composer.anonymous-mode .write-container {
+    background: rgba(255, 193, 7, 0.05);
+}
+
+/* Anonymous preview alert */
+.anonymous-preview {
+    margin-bottom: 15px;
+    border-left: 4px solid #17a2b8;
+    background: rgba(23, 162, 184, 0.1);
+    border-radius: 0 4px 4px 0;
+}
+
+.anonymous-preview .fa {
+    margin-right: 8px;
+    color: #17a2b8;
+}
+
+/* Anonymous post display */
+.posts-list [data-anonymous="true"] .avatar,
+.topic-list [data-anonymous="true"] .avatar {
+    background: #666 !important;
+    color: white;
+}
+
+.posts-list [data-anonymous="true"] .avatar img,
+.topic-list [data-anonymous="true"] .avatar img {
+    display: none;
+}
+
+.posts-list [data-anonymous="true"] .username,
+.topic-list [data-anonymous="true"]
