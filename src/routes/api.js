@@ -42,4 +42,8 @@ module.exports = function (app, middleware, controllers) {
 		middleware.canViewUsers,
 		middleware.checkAccountPermissions,
 	], helpers.tryRoute(controllers.accounts.edit.uploadPicture));
+
+	const searchBarRoutes = require('./searchBar')(middleware);
+	router.use(searchBarRoutes);
+
 };
