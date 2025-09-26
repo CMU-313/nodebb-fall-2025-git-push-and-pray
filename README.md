@@ -1,7 +1,7 @@
 ## New Features Implemented By Team Git Push & Pray:
 
 - Ryan Wang, [@ryan-twang](https://github.com/ryan-twang)
-- 
+- Marcus White, [@MarcusWh-cmu](https://github.com/MarcusWh-cmu)
 - 
 - 
 
