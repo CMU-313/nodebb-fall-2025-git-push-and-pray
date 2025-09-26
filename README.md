@@ -3,7 +3,7 @@
 - Ryan Wang, [@ryan-twang](https://github.com/ryan-twang)
 - Marcus White, [@MarcusWh-cmu](https://github.com/MarcusWh-cmu)
 - Ruhani Patel, [@ruhanicpatel] (https://github.com/ruhanicpatel)
-- 
+- Skylar Arce, [@skylararce] (https://github.com/skylararce)
 
 
 
