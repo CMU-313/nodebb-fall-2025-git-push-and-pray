@@ -69,4 +69,36 @@
 }
 
 .posts-list [data-anonymous="true"] .username,
-.topic-list [data-anonymous="true"]
+.topic-list [data-anonymous="true"] .username {
+    color: #666 !important;
+}
+
+/* Anonymous post indicator */
+.anonymous-post {
+    position: relative;
+}
+
+.anonymous-post::after {
+    content: "🔒 Anonymous";
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    color: #666;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Hide user links for anonymous posts */
+.anonymous-post [component="post/author"] a[href*="/user/"] {
+    pointer-events: none;
+    color: #666 !important;
+    text-decoration: none !important;
+}
+
+.anonymous-post [component="post/author"] a[href*="/user/"]:hover {
+    color: #666 !important;
+}

@@ -20,6 +20,8 @@ plugin.filterPostCreate = async function (hookData) {
   if (isAnon) {
     hookData.post = hookData.post || {};
     hookData.post[FIELD] = 1;
+    // Ensure both field names are set for client compatibility
+    hookData.post.anonymous = 1;
   }
   return hookData;
 };
@@ -29,6 +31,9 @@ plugin.actionPostSave = async function ({ post }) {
   const val = post[FIELD] ? 1 : 0;
   if (val) {
     await db.setObjectField(`post:${post.pid}`, FIELD, 1);
+    // Ensure the flag is set on the post object for immediate client updates
+    post[FIELD] = 1;
+    post.anonymous = 1; // Also set the standard field name
   }
   console.log(`${LOG} ACTION POST SAVE :: pid=${post.pid} saved ${FIELD}=${val}`);
 };
@@ -103,6 +108,27 @@ plugin.maskAfterAddPostData = async function (postData) {
   return postData;
 };
 
+// --------------------------------------------------------------------
+// 6) Socket event filters to ensure anonymous posts are masked in real-time
+// --------------------------------------------------------------------
+plugin.filterSocketNewPost = async function (hookData) {
+  const { post } = hookData;
+  if (post && isAnon(post)) {
+    maskDisplay(post);
+    console.log(`${LOG} SOCKET NEW POST :: masked pid=${post.pid}`);
+  }
+  return hookData;
+};
+
+plugin.filterSocketNewPosts = async function (hookData) {
+  const { uidsTo, post } = hookData;
+  if (post && isAnon(post)) {
+    maskDisplay(post);
+    console.log(`${LOG} SOCKET NEW POSTS :: masked pid=${post.pid}`);
+  }
+  return hookData;
+};
+
 // ----------------------------------------------------------
 // 6) Optional: add checkbox html into composer template data
 // ----------------------------------------------------------
@@ -143,6 +169,9 @@ function maskDisplay(p) {
   if ('username' in p) p.username = 'Anonymous';
   if ('userslug'  in p) p.userslug = undefined;
 
+  // Ensure both field names are available for client-side detection
+  p[FIELD] = 1;
+  p.anonymous = 1;
   p.isAnonymousDisplay = true;
 }
 

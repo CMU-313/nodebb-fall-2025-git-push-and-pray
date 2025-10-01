@@ -16,6 +16,9 @@
       { "hook": "filter:post.getPosts",      "method": "maskPostsList_post",    "priority": 10 },
   
       { "hook": "filter:topics.addPostData", "method": "maskAfterAddPostData",  "priority": 200 },
+      
+      { "hook": "filter:sockets.sendNewPostToUid", "method": "filterSocketNewPost", "priority": 5 },
+      { "hook": "filter:sockets.sendNewPostToUids", "method": "filterSocketNewPosts", "priority": 5 },
   
       { "hook": "filter:composer.build",     "method": "filterComposerBuild",   "priority": 5  }
     ],

@@ -51,6 +51,10 @@ if (typeof require === 'function') {
       const $active = $('.composer:not(.hidden)');
       const isChecked = $active.find('.js-anonymous-checkbox').is(':checked');
       console.log('=== COMPOSER SUBMIT HOOK === checked=', isChecked);
+      
+      // Store the anonymous state for immediate application
+      storeAnonymousState();
+      
       if (isChecked && data.composerData) {
         data.composerData.anonymous = '1';
         if (data.postData) data.postData.anonymous = '1';
@@ -66,6 +70,45 @@ if (typeof require === 'function') {
         if (data.topicData) data.topicData.anonymous = '1';
       }
       return data;
+    });
+
+    // Hook into new post events to mask display immediately
+    hooks.on('action:topic.reply', function (data) {
+      // Check if the reply was anonymous and apply masking
+      if (data && data.post && isPostMarkedAnonymous(data.post)) {
+        console.log('=== APPLYING IMMEDIATE ANONYMOUS MASKING TO REPLY ===');
+        applyClientSideAnonymousMasking(data.post);
+      }
+    });
+
+    hooks.on('action:topic.post', function (data) {
+      // Check if the new topic was anonymous and apply masking
+      if (data && data.post && isPostMarkedAnonymous(data.post)) {
+        console.log('=== APPLYING IMMEDIATE ANONYMOUS MASKING TO NEW TOPIC ===');
+        applyClientSideAnonymousMasking(data.post);
+      }
+    });
+    
+    // Additional hook for when posts are actually displayed
+    hooks.on('action:posts.loaded', function (data) {
+      if (data && data.posts) {
+        data.posts.forEach(function(post) {
+          if (isPostMarkedAnonymous(post)) {
+            console.log('=== POSTS LOADED: APPLYING ANONYMOUS MASKING ===', post.pid);
+            applyClientSideAnonymousMasking(post);
+          }
+        });
+      }
+    });
+    
+    // Hook for when composer is submitted successfully 
+    hooks.on('action:composer.submitted', function (data) {
+      if (window.lastPostAnonymous && data.post) {
+        console.log('=== COMPOSER SUBMITTED: POST WAS ANONYMOUS ===', data.post.pid);
+        data.post.anonymous = 1;
+        applyClientSideAnonymousMasking(data.post);
+        window.lastPostAnonymous = false; // Reset
+      }
     });
 
     // NOTE: removed any posts/topic loaded handlers that queried /api/post/:pid/anonymous
@@ -139,4 +182,46 @@ $(document).on('submit', '[component="composer"] form', function () {
     $form.append('<input type="hidden" name="anonymous" value="1">');
     $form.attr('data-anonymous', '1');
   }
+});
+
+// Helper functions for anonymous masking
+function isPostMarkedAnonymous(post) {
+  return post && (post.anonymous === 1 || post.anonymous === '1' || post.anonymous === true);
+}
+
+function applyClientSideAnonymousMasking(post) {
+  if (!post) return;
+  
+  // Apply the same masking logic that the server uses
+  if (post.user) {
+    post.user.displayname = 'Anonymous';
+    post.user.username = 'Anonymous';
+    post.user.fullname = 'Anonymous';
+    post.user.userslug = undefined;
+    post.user.picture = undefined;
+  }
+  
+  // Top-level fallbacks
+  if ('username' in post) post.username = 'Anonymous';
+  if ('userslug' in post) post.userslug = undefined;
+  
+  // Mark for UI purposes
+  post.isAnonymousDisplay = true;
+  
+  console.log('Applied client-side anonymous masking to post:', post.pid);
+}
+
+// Store the anonymous checkbox state to check later
+function storeAnonymousState() {
+  const $activeComposer = $('.composer:not(.hidden)');
+  const isChecked = $activeComposer.find('.js-anonymous-checkbox').is(':checked');
+  
+  // Store in session storage or global variable for quick access
+  window.lastPostAnonymous = isChecked;
+  console.log('Stored anonymous state:', isChecked);
+}
+
+// Check anonymous state before submitting
+$(document).on('change', '.js-anonymous-checkbox', function() {
+  storeAnonymousState();
 });
