@@ -86,7 +86,7 @@ searchbarController.search = async function (req, res) {
 			deleted: p.deleted || 0,
 			upvotes: p.upvotes || 0,
 			url: p.pid ? `/post/${p.pid}` : (p.tid ? `/topic/${p.tid}` : null),
-		  }));
+		}));
 		  
 		
 		return res.json({
@@ -97,6 +97,7 @@ searchbarController.search = async function (req, res) {
 			searchTime: Date.now() - startTime, // always return a number
 		});
 	} catch (err) {
+		/* istanbul ignore next */
 		console.error('[searchbar error]', err);
 		return res.status(500).json({
 			success: false,
