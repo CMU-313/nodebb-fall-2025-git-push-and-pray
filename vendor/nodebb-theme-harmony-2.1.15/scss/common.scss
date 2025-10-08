@@ -130,3 +130,27 @@ body:not(.page-user) {
 .post-queue.posts-list .post-content {
 	a { text-decoration: underline;}
 }
+
+// Anonymous posting styles
+.anonymous-option-container {
+	border-top: 1px solid var(--bs-border-color);
+	border-bottom: 1px solid var(--bs-border-color);
+	background-color: var(--bs-light);
+	margin: 0 -1rem;
+	padding: 0.5rem 1rem !important;
+	
+	.form-check-label {
+		color: var(--bs-secondary);
+		font-size: 0.9rem;
+		cursor: pointer;
+		
+		.fa-user-secret {
+			color: var(--bs-primary);
+		}
+	}
+	
+	.form-check-input:checked {
+		background-color: var(--bs-warning);
+		border-color: var(--bs-warning);
+	}
+}
