@@ -20,10 +20,12 @@
       { "hook": "filter:sockets.sendNewPostToUid", "method": "filterSocketNewPost", "priority": 5 },
       { "hook": "filter:sockets.sendNewPostToUids", "method": "filterSocketNewPosts", "priority": 5 },
   
-      { "hook": "filter:composer.build",     "method": "filterComposerBuild",   "priority": 5  }
+      { "hook": "filter:composer.build",     "method": "filterComposerBuild",   "priority": 5  },
+      { "hook": "filter:topics.build",       "method": "filterRenderTopics",    "priority": 15 },
+      { "hook": "filter:topic.build",        "method": "filterRenderTopic",     "priority": 15 }
     ],
     "staticDirs": { "static": "./static" },
-    "css": ["static/style.css"],
+    "css": ["static/lib/style.css"],
     "scripts": [
       "static/lib/composer-anonymous.js",
       "static/lib/main.js"

@@ -21,7 +21,7 @@ define('forum/anonymous-posting', ['hooks'], function (hooks) {
 					// Fire hook for other plugins/modules to listen to
 					hooks.fire('action:composer.anonymous.toggle', {
 						anonymous: isAnonymous,
-						composer: composer
+						composer: composer,
 					});
 				});
 			}
@@ -30,10 +30,15 @@ define('forum/anonymous-posting', ['hooks'], function (hooks) {
 		// Listen for post submission to include anonymous flag
 		hooks.on('filter:composer.submit', function (data) {
 			const composer = data.composer;
-			const isAnonymous = composer.attr('data-anonymous') === 'true';
+			const anonymousCheckbox = composer.find('[component="composer/anonymous"]');
+			const isAnonymous = anonymousCheckbox.length > 0 ? anonymousCheckbox.is(':checked') : false;
 			
 			if (isAnonymous) {
-				data.anonymous = true;
+				// Set the anonymous flag in multiple places for compatibility
+				data.anonymous = '1';
+				if (data.postData) data.postData.anonymous = '1';
+				if (data.composerData) data.composerData.anonymous = '1';
+				console.log('Anonymous flag set in composer submit filter');
 			}
 			
 			return data;

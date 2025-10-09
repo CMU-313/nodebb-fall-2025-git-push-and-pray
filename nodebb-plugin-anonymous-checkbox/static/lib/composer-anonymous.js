@@ -8,9 +8,20 @@ $(document).ready(function() {
   console.log('=== ANONYMOUS PLUGIN JQUERY READY ===');
 
   function initCheckbox() {
+    // Check for theme checkbox first
+    const $themeCheckbox = $('[component="composer/anonymous"]');
+    if ($themeCheckbox.length > 0 && !$themeCheckbox.data('anon-initialized')) {
+      console.log('=== INITIALIZING THEME CHECKBOX ===');
+      $themeCheckbox.data('anon-initialized', true);
+      const $composer = $themeCheckbox.closest('[component="composer"]');
+      initThemeCheckbox($composer);
+      return;
+    }
+    
+    // Fall back to plugin checkbox
     const $checkbox = $('.js-anonymous-checkbox');
     if ($checkbox.length > 0 && !$checkbox.data('anon-initialized')) {
-      console.log('=== INITIALIZING CHECKBOX ===');
+      console.log('=== INITIALIZING PLUGIN CHECKBOX ===');
       $checkbox.data('anon-initialized', true);
 
       $checkbox.on('change', function() {
@@ -42,14 +53,34 @@ if (typeof require === 'function') {
       console.log('=== COMPOSER LOADED HOOK ===', data);
       const uuid = data.post_uuid;
       const $composer = $(`[component="composer"][data-uuid="${uuid}"]`);
-      addAnonymousCheckbox($composer);
-      initComposerCheckbox($composer);
+      // Use theme's checkbox if available, otherwise add our own
+      if ($composer.find('[component="composer/anonymous"]').length > 0) {
+        initThemeCheckbox($composer);
+      } else {
+        addAnonymousCheckbox($composer);
+        initComposerCheckbox($composer);
+      }
+    });
+
+    // Listen for composer enhancement (used by the compose.js module)
+    hooks.on('action:composer.enhance', function (data) {
+      console.log('=== COMPOSER ENHANCE HOOK ===', data);
+      const $composer = data.container;
+      if ($composer.find('[component="composer/anonymous"]').length > 0) {
+        initThemeCheckbox($composer);
+      } else {
+        addAnonymousCheckbox($composer);
+        initComposerCheckbox($composer);
+      }
     });
 
     // Ensure the flag is sent (primary path)
     hooks.on('action:composer.submit', function (data) {
       const $active = $('.composer:not(.hidden)');
-      const isChecked = $active.find('.js-anonymous-checkbox').is(':checked');
+      const themeCheckbox = $active.find('[component="composer/anonymous"]');
+      const pluginCheckbox = $active.find('.js-anonymous-checkbox');
+      const isChecked = themeCheckbox.length > 0 ? themeCheckbox.is(':checked') : pluginCheckbox.is(':checked');
+      
       console.log('=== COMPOSER SUBMIT HOOK === checked=', isChecked);
       
       // Store the anonymous state for immediate application
@@ -61,13 +92,19 @@ if (typeof require === 'function') {
       }
     });
 
-    // Backup path
+    // Backup path - ensure anonymous flag is included in submission data
     hooks.on('filter:composer.submit', function (data) {
       const $active = $('.composer:not(.hidden)');
-      const isChecked = $active.find('.js-anonymous-checkbox').is(':checked');
+      const themeCheckbox = $active.find('[component="composer/anonymous"]');
+      const pluginCheckbox = $active.find('.js-anonymous-checkbox');
+      const isChecked = themeCheckbox.length > 0 ? themeCheckbox.is(':checked') : pluginCheckbox.is(':checked');
+      
       if (isChecked) {
         if (data.postData) data.postData.anonymous = '1';
         if (data.topicData) data.topicData.anonymous = '1';
+        if (data.composerData) data.composerData.anonymous = '1';
+        // Also set it directly on data for compatibility
+        data.anonymous = '1';
       }
       return data;
     });
@@ -159,6 +196,30 @@ function initComposerCheckbox($composer) {
   });
 }
 
+// Initialize the theme's built-in anonymous checkbox
+function initThemeCheckbox($composer) {
+  const $checkbox = $composer.find('[component="composer/anonymous"]');
+  if ($checkbox.length === 0) return;
+
+  console.log('=== INITIALIZING THEME CHECKBOX ===');
+  
+  $checkbox.off('change.anonymous').on('change.anonymous', function () {
+    const isChecked = this.checked;
+    if (isChecked) {
+      $composer.addClass('anonymous-mode');
+      showAnonymousPreview($composer);
+    } else {
+      $composer.removeClass('anonymous-mode');
+      hideAnonymousPreview($composer);
+    }
+    
+    // Store the anonymous state on the composer container for compatibility
+    $composer.attr('data-anonymous', isChecked);
+    
+    console.log('=== THEME CHECKBOX STATE CHANGED ===', isChecked);
+  });
+}
+
 function showAnonymousPreview($composer) {
   if ($composer.find('.anonymous-preview').length) return;
   $composer.find('.write').prepend(`
@@ -176,11 +237,15 @@ function hideAnonymousPreview($composer) {
 $(document).on('submit', '[component="composer"] form', function () {
   const $form = $(this);
   const $composer = $form.closest('[component="composer"]');
-  const isChecked = $composer.find('.js-anonymous-checkbox').is(':checked');
+  const themeCheckbox = $composer.find('[component="composer/anonymous"]');
+  const pluginCheckbox = $composer.find('.js-anonymous-checkbox');
+  const isChecked = themeCheckbox.length > 0 ? themeCheckbox.is(':checked') : pluginCheckbox.is(':checked');
+  
   if (isChecked) {
     $form.find('input[name="anonymous"]').remove();
     $form.append('<input type="hidden" name="anonymous" value="1">');
     $form.attr('data-anonymous', '1');
+    console.log('=== FORM SUBMIT: ADDED ANONYMOUS FLAG ===');
   }
 });
 
@@ -204,6 +269,7 @@ function applyClientSideAnonymousMasking(post) {
   // Top-level fallbacks
   if ('username' in post) post.username = 'Anonymous';
   if ('userslug' in post) post.userslug = undefined;
+  if ('picture' in post) post.picture = undefined;
   
   // Mark for UI purposes
   post.isAnonymousDisplay = true;
@@ -214,7 +280,9 @@ function applyClientSideAnonymousMasking(post) {
 // Store the anonymous checkbox state to check later
 function storeAnonymousState() {
   const $activeComposer = $('.composer:not(.hidden)');
-  const isChecked = $activeComposer.find('.js-anonymous-checkbox').is(':checked');
+  const themeCheckbox = $activeComposer.find('[component="composer/anonymous"]');
+  const pluginCheckbox = $activeComposer.find('.js-anonymous-checkbox');
+  const isChecked = themeCheckbox.length > 0 ? themeCheckbox.is(':checked') : pluginCheckbox.is(':checked');
   
   // Store in session storage or global variable for quick access
   window.lastPostAnonymous = isChecked;
@@ -222,6 +290,6 @@ function storeAnonymousState() {
 }
 
 // Check anonymous state before submitting
-$(document).on('change', '.js-anonymous-checkbox', function() {
+$(document).on('change', '.js-anonymous-checkbox, [component="composer/anonymous"]', function() {
   storeAnonymousState();
 });

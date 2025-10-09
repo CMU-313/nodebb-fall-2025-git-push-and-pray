@@ -149,6 +149,35 @@ plugin.filterComposerBuild = async function (hookData) {
   return hookData;
 };
 
+// ----------------------------------------------------------
+// 7) Ensure anonymous posts get proper attributes on page load
+// ----------------------------------------------------------
+plugin.filterRenderTopics = async function (hookData) {
+  const { templateData } = hookData || {};
+  if (templateData && templateData.posts) {
+    templateData.posts.forEach(post => {
+      if (isAnon(post)) {
+        post.anonymousClass = 'anonymous-post';
+        post.anonymousDataAttr = 'data-anonymous="true"';
+      }
+    });
+  }
+  return hookData;
+};
+
+plugin.filterRenderTopic = async function (hookData) {
+  const { templateData } = hookData || {};
+  if (templateData && templateData.posts) {
+    templateData.posts.forEach(post => {
+      if (isAnon(post)) {
+        post.anonymousClass = 'anonymous-post';
+        post.anonymousDataAttr = 'data-anonymous="true"';
+      }
+    });
+  }
+  return hookData;
+};
+
 // -----------------
 // Helpers
 // -----------------
@@ -164,15 +193,25 @@ function maskDisplay(p) {
     p.user.username    = 'Anonymous';
     p.user.fullname    = 'Anonymous';
     p.user.userslug    = undefined;     // href becomes '#'
+    p.user.picture     = undefined;     // remove profile picture
+    
+    // Add a special flag to indicate this user object was anonymized
+    p.user['icon:text'] = '';           // Clear any initial text
+    p.user['icon:bgColor'] = '#666666'; // Set grey background
   }
   // Top-level fallbacks (for other templates/API)
   if ('username' in p) p.username = 'Anonymous';
   if ('userslug'  in p) p.userslug = undefined;
+  if ('picture'   in p) p.picture = undefined;
 
   // Ensure both field names are available for client-side detection
   p[FIELD] = 1;
   p.anonymous = 1;
   p.isAnonymousDisplay = true;
+  
+  // Add CSS class indicators for templates
+  p.anonymousClass = 'anonymous-post';
+  p.anonymousDataAttr = 'data-anonymous="true"';
 }
 
 module.exports = plugin;

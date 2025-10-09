@@ -13,6 +13,14 @@ $(document).ready(function() {
         setupSocketListeners();
     }
     
+    // Mark anonymous posts every time posts are loaded
+    $(document).on('ajaxComplete', function() {
+        setTimeout(markAnonymousPosts, 100);
+    });
+    
+    // Also mark on initial page load
+    setTimeout(markAnonymousPosts, 500);
+    
     // Override socket event handlers to apply immediate masking
     if (typeof window !== 'undefined' && window.socket) {
         const originalEmit = window.socket.emit;
@@ -39,9 +47,44 @@ function markAnonymousPosts() {
         const $post = $(this);
         const postData = $post.data();
         
-        // Check if post is anonymous (this would come from your backend data)
-        if (postData.anonymous || $post.find('[data-anonymous="true"]').length > 0) {
+        // Check multiple ways a post could be marked as anonymous
+        const isAnonymousPost = postData.anonymous || 
+                               postData.anonymous === 1 || 
+                               postData.anonymous === '1' || 
+                               $post.find('[data-anonymous="true"]').length > 0 || 
+                               $post.attr('data-anonymous') === 'true' || 
+                               $post.hasClass('anonymous-post') ||
+                               // Check if the username is already "Anonymous"
+                               $post.find('[component="post/username"], .username').text().trim() === 'Anonymous';
+        
+        if (isAnonymousPost) {
             $post.addClass('anonymous-post');
+            $post.attr('data-anonymous', 'true');
+            
+            // Hide the actual profile image and show grey circle
+            const $avatar = $post.find('.avatar, [component="user/picture"], [component="post/author"] .avatar');
+            if ($avatar.length > 0) {
+                $avatar.addClass('anonymous-avatar');
+                $avatar.find('img').hide();
+                // Clear any text content (like initials)
+                $avatar.contents().each(function() {
+                    if (this.nodeType === 3) { // Text node
+                        this.textContent = '';
+                    }
+                });
+                // Clear any generated initials
+                $avatar.html('');
+                $avatar.text('');
+                
+                // Force the styling
+                $avatar.css({
+                    'background': '#666',
+                    'color': 'transparent',
+                    'font-size': '0',
+                    'text-indent': '-9999px'
+                });
+            }
+            
             console.log('Marked post as anonymous:', $post.attr('data-pid'));
         }
     });

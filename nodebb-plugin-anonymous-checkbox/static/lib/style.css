@@ -58,14 +58,53 @@
 
 /* Anonymous post display */
 .posts-list [data-anonymous="true"] .avatar,
-.topic-list [data-anonymous="true"] .avatar {
+.topic-list [data-anonymous="true"] .avatar,
+[component="post"][data-anonymous="true"] .avatar,
+[component="post"].anonymous-post .avatar {
     background: #666 !important;
-    color: white;
+    color: transparent !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    position: relative;
+    font-size: 0 !important; /* Hide any text content */
+    text-indent: -9999px !important; /* Hide any text content */
+    overflow: hidden !important;
 }
 
 .posts-list [data-anonymous="true"] .avatar img,
-.topic-list [data-anonymous="true"] .avatar img {
-    display: none;
+.topic-list [data-anonymous="true"] .avatar img,
+[component="post"][data-anonymous="true"] .avatar img,
+[component="post"].anonymous-post .avatar img {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* Hide any text content including initials */
+.posts-list [data-anonymous="true"] .avatar *,
+.topic-list [data-anonymous="true"] .avatar *,
+[component="post"][data-anonymous="true"] .avatar *,
+[component="post"].anonymous-post .avatar * {
+    color: transparent !important;
+    font-size: 0 !important;
+    display: none !important;
+}
+
+/* Add a user icon to anonymous avatars */
+[component="post"][data-anonymous="true"] .avatar::before,
+[component="post"].anonymous-post .avatar::before,
+.posts-list [data-anonymous="true"] .avatar::before,
+.topic-list [data-anonymous="true"] .avatar::before {
+    content: "👤";
+    font-size: 16px !important;
+    color: white !important;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block !important;
+    z-index: 10;
 }
 
 .posts-list [data-anonymous="true"] .username,
