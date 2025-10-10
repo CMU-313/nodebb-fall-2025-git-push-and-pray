@@ -60,57 +60,39 @@ $(document).ready(function () {
 			});
 		},
 
-		performSearch: function (page = 1) {
-			const query = $('#search-input').val().trim();
-			
-			if (!query) {
-				app.alertError('Please enter a search query');
+		performSearch: function (query, page = 1) {
+			if (!query || query.length < 2) {
+				this.showError('Please enter at least 2 characters to search');
 				return;
 			}
 
+			this.showLoading();
+
 			const searchData = {
-				query: query,
-				searchIn: $('#search-in').val() || 'titlesposts',
+				term: query,
 				page: page,
 				itemsPerPage: parseInt($('#items-per-page').val()) || 20,
-				sortBy: $('#sort-by').val() || 'relevance',
 			};
 
-			this.showLoading();
-			this.hideResults();
-			this.hideError();
-
-			// Update URL with search query
-			const newUrl = new URL(window.location);
-			newUrl.searchParams.set('q', query);
-			window.history.replaceState({}, '', newUrl);
-
-			// Make API request to your backend
 			$.ajax({
-				url: config.relative_path + '/api/search',
+				url: `${config.relative_path}/api/searchbar`,
 				type: 'GET',
 				data: searchData,
 				success: (response) => {
 					this.hideLoading();
-					
-					if (response.success && response.data) {
-						this.displayResults(response.data, searchData);
+					if (response.success && response.posts !== undefined) {
+						this.displayResults(response, searchData);
 						this.saveSearchHistory();
 					} else {
-						this.showError(response.error || 'Search failed');
+						this.showError('Search failed: ' + (response.error || 'Unknown error'));
 					}
 				},
 				error: (xhr) => {
 					this.hideLoading();
-					let errorMessage = 'Search failed';
-					
-					try {
-						const response = JSON.parse(xhr.responseText);
-						errorMessage = response.error || errorMessage;
-					} catch (e) {
-						// Use default error message
+					let errorMessage = 'Search request failed';
+					if (xhr.responseJSON && xhr.responseJSON.message) {
+						errorMessage = xhr.responseJSON.message;
 					}
-					
 					this.showError(errorMessage);
 				},
 			});
