@@ -3,7 +3,9 @@
 const privileges = require('../privileges');
 const utils = require('../utils');
 
-module.exports = async function (req, res) {
+const searchbarController = {};
+
+searchbarController.searchbar = async function (req, res) {
 	// Get user privileges for search options
 	const privs = await utils.promiseParallel({
 		'search:users': privileges.global.can('search:users', req.uid),
@@ -20,3 +22,5 @@ module.exports = async function (req, res) {
 		title: '[[global:search]]',
 	});
 };
+
+module.exports = searchbarController;

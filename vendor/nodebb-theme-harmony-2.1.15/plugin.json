@@ -22,5 +22,8 @@
 		"inter": "node_modules/@fontsource/inter/files",
 		"poppins": "node_modules/@fontsource/poppins/files"
 	},
+	"templates": {
+		"searchbar.tpl": "templates/searchbar.tpl"
+	},
 	"languages": "languages"
 }
