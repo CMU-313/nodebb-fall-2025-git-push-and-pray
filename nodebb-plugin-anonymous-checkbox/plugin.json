@@ -1,0 +1,35 @@
+{
+    "id": "nodebb-plugin-anonymous-checkbox",
+    "name": "Anonymous Posts",
+    "description": "Mask author display name as Anonymous when flagged",
+    "version": "1.0.0",
+    "library": "./library.js",
+    "hooks": [
+      { "hook": "filter:post.create",        "method": "filterPostCreate",      "priority": 5  },
+      { "hook": "action:post.save",          "method": "actionPostSave",        "priority": 5  },
+  
+      { "hook": "filter:post.getFields",     "method": "addAnonField",          "priority": 5  },
+  
+      { "hook": "filter:post.get",           "method": "filterPostGet",         "priority": 10 },
+  
+      { "hook": "filter:topic.getPosts",     "method": "maskPostsList_topic",   "priority": 10 },
+      { "hook": "filter:post.getPosts",      "method": "maskPostsList_post",    "priority": 10 },
+  
+      { "hook": "filter:topics.addPostData", "method": "maskAfterAddPostData",  "priority": 200 },
+      
+      { "hook": "filter:sockets.sendNewPostToUid", "method": "filterSocketNewPost", "priority": 5 },
+      { "hook": "filter:sockets.sendNewPostToUids", "method": "filterSocketNewPosts", "priority": 5 },
+  
+      { "hook": "filter:composer.build",     "method": "filterComposerBuild",   "priority": 5  },
+      { "hook": "filter:topics.build",       "method": "filterRenderTopics",    "priority": 15 },
+      { "hook": "filter:topic.build",        "method": "filterRenderTopic",     "priority": 15 }
+    ],
+    "staticDirs": { "static": "./static" },
+    "css": ["static/lib/style.css"],
+    "scripts": [
+      "static/lib/composer-anonymous.js",
+      "static/lib/main.js"
+    ],
+    "compatibility": "^3.0.0"
+  }
+  

@@ -6,6 +6,7 @@
 		<a href="{config.relative_path}/" class="btn btn-ghost btn-sm d-flex gap-2 align-items-center fw-semibold text-decoration-none"><i class="fa fa-fw fa-home"></i> [[admin/menu:view-forum]]</a>
 
 		<!-- IMPORT admin/partials/search.tpl -->
+		<input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input">
 	</div>
 	<div class="d-flex flex-column gap-1 ff-secondary flex-1 overflow-auto">
 		<!-- IMPORT admin/partials/navigation.tpl -->
