@@ -1,3 +1,13 @@
+## New Features Implemented By Team Git Push & Pray:
+
+- Ryan Wang, [@ryan-twang](https://github.com/ryan-twang)
+- Marcus White, [@MarcusWh-cmu](https://github.com/MarcusWh-cmu)
+- Ruhani Patel, [@ruhanicpatel] (https://github.com/ruhanicpatel)
+- Skylar Arce, [@skylararce] (https://github.com/skylararce)
+
+
+
+
 # ![NodeBB](public/images/sm-card.png)
 
 ![Team Contribution Summary](https://raw.githubusercontent.com/CMU-313/NodeBB/gittogether-svg/activity.svg)
