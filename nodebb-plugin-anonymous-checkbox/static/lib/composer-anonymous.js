@@ -129,14 +129,38 @@ function hideAnonymousPreview($composer) {
   $composer.find('.anonymous-preview').remove();
 }
 
+// Handle checkbox click to toggle anonymous state
+$(document).on('change', '[component="composer"] .js-anonymous-checkbox', function () {
+  const $checkbox = $(this);
+  const $composer = $checkbox.closest('[component="composer"]');
+  const $form = $composer.find('form');
+
+  if ($checkbox.is(':checked')) {
+    // Add hidden input for anonymous
+    $form.find('input[name="anonymous"]').remove();
+    $form.append('<input type="hidden" name="anonymous" value="1">');
+    $form.attr('data-anonymous', '1');
+  } else {
+    // Remove anonymous hidden input
+    $form.find('input[name="anonymous"]').remove();
+    $form.removeAttr('data-anonymous');
+  }
+});
+
 // Fallback: ensure flag is in form submits too
 $(document).on('submit', '[component="composer"] form', function () {
   const $form = $(this);
   const $composer = $form.closest('[component="composer"]');
   const isChecked = $composer.find('.js-anonymous-checkbox').is(':checked');
+
   if (isChecked) {
+    // Ensure hidden input exists for anonymous
     $form.find('input[name="anonymous"]').remove();
     $form.append('<input type="hidden" name="anonymous" value="1">');
     $form.attr('data-anonymous', '1');
+  } else {
+    // Ensure anonymous flag is not submitted
+    $form.find('input[name="anonymous"]').remove();
+    $form.removeAttr('data-anonymous');
   }
 });
