@@ -13,6 +13,9 @@ module.exports = function (app, middleware, controllers) {
 	app.use('/api', router);
 	router.get('/searchbar', middlewares, searchbarController.search);
 
+	// Core search functionality
+	router.get('/search', middlewares, helpers.tryRoute(controllers.search.search));
+
 
 	router.get('/config', [...middlewares, middleware.applyCSRF], helpers.tryRoute(controllers.api.getConfig));
 
@@ -46,4 +49,8 @@ module.exports = function (app, middleware, controllers) {
 		middleware.canViewUsers,
 		middleware.checkAccountPermissions,
 	], helpers.tryRoute(controllers.accounts.edit.uploadPicture));
+
+	const searchBarRoutes = require('./searchBar')(middleware);
+	router.use(searchBarRoutes);
+
 };

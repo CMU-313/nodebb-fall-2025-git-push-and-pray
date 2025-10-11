@@ -302,3 +302,4 @@ User.addInterstitials = function (callback) {
 };
 
 require('../promisify')(User);
+module.exports = User;

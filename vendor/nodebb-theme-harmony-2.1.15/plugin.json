@@ -15,11 +15,15 @@
 	],
 	"modules": {
 		"../admin/plugins/harmony.js": "public/admin.js",
-		"../client/account/theme.js": "public/settings.js"
+		"../client/account/theme.js": "public/settings.js",
+		"../client/searchbar.js": "public/searchbar.js"
 	},
 	"staticDirs": {
 		"inter": "node_modules/@fontsource/inter/files",
 		"poppins": "node_modules/@fontsource/poppins/files"
+	},
+	"templates": {
+		"searchbar.tpl": "templates/searchbar.tpl"
 	},
 	"languages": "languages"
 }

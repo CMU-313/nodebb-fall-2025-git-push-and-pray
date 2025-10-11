@@ -35,8 +35,9 @@ _mounts.main = (app, middleware, controllers) => {
 	setupPageRoute(app, '/compose', [], controllers.composer.get);
 	setupPageRoute(app, '/confirm/:code', [], controllers.confirmEmail);
 	setupPageRoute(app, '/outgoing', [], controllers.outgoing);
-	setupPageRoute(app, '/search', [], controllers.search.search);
+	setupPageRoute(app, '/search', [], controllers.search.search); 
 	setupPageRoute(app, '/reset/:code?', [middleware.delayLoading], controllers.reset);
+	setupPageRoute(app, '/searchbar', [], controllers.searchbar.searchbar);
 	setupPageRoute(app, '/tos', [], controllers.termsOfUse);
 
 	setupPageRoute(app, '/email/unsubscribe/:token', [], controllers.accounts.settings.unsubscribe);

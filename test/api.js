@@ -168,7 +168,8 @@ describe('API', async () => {
 	};
 
 	async function dummySearchHook(data) {
-		return [1];
+		// Return empty search results - this should result in posts: [], matchCount: 0, etc.
+		return { ids: [] };
 	}
 	async function dummyEmailerHook(data) {
 		// pretend to handle sending emails
@@ -302,10 +303,12 @@ describe('API', async () => {
 		await wait(5000);
 
 		// Attach a search hook so /api/search is enabled
+		console.log('Registering search hook...');
 		plugins.hooks.register('core', {
 			hook: 'filter:search.query',
 			method: dummySearchHook,
 		});
+		console.log('Search hook registered. Has listeners:', plugins.hooks.hasListeners('filter:search.query'));
 		// Attach an emailer hook so related requests do not error
 		plugins.hooks.register('emailer-test', {
 			hook: 'static:email.send',
