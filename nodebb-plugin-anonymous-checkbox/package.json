@@ -1,6 +1,7 @@
 {
   "name": "nodebb-plugin-anonymous-checkbox",
   "version": "1.0.0",
+  "description": "Mask author display name as Anonymous when flagged",
   "main": "library.js",
   "nbbpm": { "compatibility": "^3.0.0" }
 }
