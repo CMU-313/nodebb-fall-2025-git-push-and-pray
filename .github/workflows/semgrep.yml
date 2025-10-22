@@ -1,0 +1,14 @@
+name: Semgrep Scan
+on:
+  pull_request:
+  push:
+    branches: [ semgrep-analysis, main ]
+
+jobs:
+  semgrep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: returntocorp/semgrep-action@v1
+        with:
+          config: auto
