@@ -15,4 +15,4 @@ jobs:
       - uses: returntocorp/semgrep-action@v1
         with:
           config: auto
-        continue-on-error: true
+        continue-on-error: true # check dashboard metrics for bugs/vulnerabilities found since it will pass on workflow
