@@ -1,0 +1,17 @@
+name: Semgrep Static Analysis
+
+on:
+  pull_request:
+  push:
+    branches: [ main, analysis/semgrep ]
+
+jobs:
+  semgrep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Runs open-source Semgrep with the default JS/TS rules
+      - uses: returntocorp/semgrep-action@v1
+        with:
+          config: auto
