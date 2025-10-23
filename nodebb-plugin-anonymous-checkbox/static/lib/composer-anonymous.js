@@ -6,10 +6,12 @@ console.log('=== ANONYMOUS PLUGIN JS FILE LOADED ===');
 // Checkbox discovery for dynamically-loaded composer
 $(document).ready(function() {
   console.log('=== ANONYMOUS PLUGIN JQUERY READY ===');
+  console.log('Current URL:', window.location.href);
+  console.log('Page contains composers:', $('[component="composer"]').length);
 
   function initCheckbox() {
-    // Check for theme checkbox first
-    const $themeCheckbox = $('[component="composer/anonymous"]');
+    // Check for theme checkbox first (look in all open composers)
+    const $themeCheckbox = $('[component="composer"]:not(.hidden) [component="composer/anonymous"]');
     if ($themeCheckbox.length > 0 && !$themeCheckbox.data('anon-initialized')) {
       console.log('=== INITIALIZING THEME CHECKBOX ===');
       $themeCheckbox.data('anon-initialized', true);
@@ -19,7 +21,7 @@ $(document).ready(function() {
     }
     
     // Fall back to plugin checkbox
-    const $checkbox = $('.js-anonymous-checkbox');
+    const $checkbox = $('[component="composer"]:not(.hidden) .js-anonymous-checkbox');
     if ($checkbox.length > 0 && !$checkbox.data('anon-initialized')) {
       console.log('=== INITIALIZING PLUGIN CHECKBOX ===');
       $checkbox.data('anon-initialized', true);
@@ -41,6 +43,30 @@ $(document).ready(function() {
   const checkboxInterval = setInterval(initCheckbox, 1000);
   setTimeout(() => clearInterval(checkboxInterval), 30000);
   initCheckbox();
+  
+  // Also watch for dynamically added composers
+  if (typeof MutationObserver !== 'undefined') {
+    const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        mutation.addedNodes.forEach(function(node) {
+          if (node.nodeType === 1) { // Element node
+            if (node.matches && node.matches('[component="composer"]')) {
+              console.log('=== NEW COMPOSER DETECTED ===');
+              setTimeout(initCheckbox, 100);
+            } else if (node.querySelector && node.querySelector('[component="composer"]')) {
+              console.log('=== COMPOSER IN NEW CONTENT ===');
+              setTimeout(initCheckbox, 100);
+            }
+          }
+        });
+      });
+    });
+    
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  }
 });
 
 if (typeof require === 'function') {
@@ -158,6 +184,7 @@ if (typeof require === 'function') {
 function addAnonymousCheckbox($composer) {
   if ($composer.length === 0) return;
   if ($composer.find('.js-anonymous-checkbox').length > 0) return;
+  if ($composer.find('[component="composer/anonymous"]').length > 0) return; // Theme already has one
 
   const id = `anonymous-post-${Date.now()}`;
   const checkboxHtml = `
@@ -171,11 +198,33 @@ function addAnonymousCheckbox($composer) {
     </div>
   `;
 
-  const $submitArea = $composer.find('[component="composer/submit-wrapper"], .composer-submit, .btn-toolbar').last();
-  if ($submitArea.length > 0) {
-    $submitArea.before(checkboxHtml);
-  } else {
-    $composer.find('.composer-container, .composer').first().append(checkboxHtml);
+  // Try multiple locations to insert the checkbox, in order of preference
+  const possibleLocations = [
+    '[component="composer/submit-wrapper"]',
+    '.composer-submit',
+    '.btn-toolbar',
+    '[component="composer/controls"]',
+    '.composer-controls',
+    '.write-container',
+    '.composer-container',
+    '.composer'
+  ];
+  
+  let inserted = false;
+  for (const selector of possibleLocations) {
+    const $target = $composer.find(selector).last();
+    if ($target.length > 0) {
+      $target.before(checkboxHtml);
+      inserted = true;
+      console.log('=== CHECKBOX INSERTED BEFORE ===', selector);
+      break;
+    }
+  }
+  
+  // Fallback: append to composer
+  if (!inserted) {
+    $composer.append(checkboxHtml);
+    console.log('=== CHECKBOX APPENDED TO COMPOSER ===');
   }
 }
 
@@ -199,9 +248,12 @@ function initComposerCheckbox($composer) {
 // Initialize the theme's built-in anonymous checkbox
 function initThemeCheckbox($composer) {
   const $checkbox = $composer.find('[component="composer/anonymous"]');
-  if ($checkbox.length === 0) return;
+  if ($checkbox.length === 0) {
+    console.log('=== THEME CHECKBOX NOT FOUND ===');
+    return;
+  }
 
-  console.log('=== INITIALIZING THEME CHECKBOX ===');
+  console.log('=== INITIALIZING THEME CHECKBOX ===', $checkbox.length);
   
   $checkbox.off('change.anonymous').on('change.anonymous', function () {
     const isChecked = this.checked;
