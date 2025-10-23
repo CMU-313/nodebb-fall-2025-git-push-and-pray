@@ -7,7 +7,7 @@ const FIELD = 'anonymous';
 const LOG   = '=== ANON ===';
 
 // Skip plugin execution during tests to prevent interference
-const isTestEnvironment = process.env.NODE_ENV === 'test' || process.env.TEST_ENV === 'production';
+const isTestEnvironment = process.env.NODE_ENV === 'test';
 
 // ---------------------------
 // 1) Capture flag on create
