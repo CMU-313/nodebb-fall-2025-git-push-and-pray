@@ -34,3 +34,5 @@ put:
                 $ref: ../../../components/schemas/Status.yaml#/Status
               response:
                 $ref: ../../../components/schemas/SettingsObj.yaml#/Settings
+    '400':
+    description: Bad Request – invalid settings data
