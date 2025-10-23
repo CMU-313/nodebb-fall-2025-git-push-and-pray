@@ -28,7 +28,7 @@ describe('GET /api/searchbar', () => {
 		// Suppress console.error during tests
 		sinon.stub(console, 'error');
 	});
-    
+	
 	after(() => {
 		// Restore console.error after all tests
 		console.error.restore();
