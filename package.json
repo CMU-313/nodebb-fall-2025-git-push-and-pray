@@ -12,6 +12,8 @@
     "scripts": {
         "start": "node loader.js",
         "lint": "eslint --cache ./nodebb .",
+        "jshint": "npx jshint app.js src/*.js nodebb-plugin-anonymous-checkbox/*.js",
+        "jshint:report": "npx jshint app.js src/*.js nodebb-plugin-anonymous-checkbox/*.js > jshint-report.txt 2>&1 || true",
         "test": "nyc --reporter=html --reporter=text-summary mocha",
         "coverage": "nyc report --reporter=text-lcov > ./coverage/lcov.info",
         "coveralls": "nyc report --reporter=text-lcov | coveralls && rm -r coverage"
@@ -173,6 +175,7 @@
         "grunt-contrib-watch": "1.1.0",
         "husky": "8.0.3",
         "jsdom": "26.1.0",
+        "jshint": "^2.13.6",
         "lint-staged": "16.0.0",
         "mocha": "^11.7.4",
         "mocha-lcov-reporter": "1.3.0",
