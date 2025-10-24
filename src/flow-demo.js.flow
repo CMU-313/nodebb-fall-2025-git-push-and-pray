@@ -1,0 +1,138 @@
+// @flow
+'use strict';
+
+/**
+ * Flow Type Checking Demo for NodeBB Anonymous Plugin
+ * This file demonstrates Flow's static type analysis capabilities
+ */
+
+/**
+ * Flow type definitions - these help catch type errors at development time
+ */
+type AnonymousPostData = {
+  anonymous: boolean | string | number,
+  content: string,
+  tid: string,
+  pid?: string,
+  ...
+};
+
+type UserInfo = {
+  uid: number,
+  username: string,
+  displayname?: string,
+  userslug?: string,
+  picture?: string,
+  ...
+};
+
+type PostObject = {
+  pid: string,
+  tid: string,
+  uid: number,
+  content: string,
+  timestamp: number,
+  anonymous?: boolean | string | number,
+  user?: UserInfo,
+  username?: string,
+  userslug?: string,
+  isAnonymousDisplay?: boolean,
+  anonymousClass?: string,
+  anonymousDataAttr?: string,
+  ...
+};
+
+/**
+ * Function with Flow type annotations
+ * Flow will catch type mismatches at check time
+ */
+function checkAnonymousFlag(data: AnonymousPostData): boolean {
+  const raw = data.anonymous;
+  const validValues = ['1', 1, true, 'true', 'on', 'yes'];
+  return validValues.includes(raw);
+}
+
+/**
+ * Function that demonstrates Flow's null/undefined checking
+ */
+function maskUserInfo(user: ?UserInfo): UserInfo {
+  if (!user) {
+    throw new Error('User data is required');
+  }
+  
+  return {
+    uid: user.uid,
+    username: 'Anonymous',
+    displayname: 'Anonymous'
+  };
+}
+
+/**
+ * Function with array type checking
+ */
+function processPostsList(posts: Array<PostObject>): Array<PostObject> {
+  return posts.map(post => {
+    if (checkAnonymousFlag({ anonymous: post.anonymous || false, content: post.content, tid: post.tid })) {
+      return {
+        ...post,
+        user: maskUserInfo(post.user),
+        username: 'Anonymous',
+        userslug: undefined,
+        isAnonymousDisplay: true,
+        anonymousClass: 'anonymous-post',
+        anonymousDataAttr: 'data-anonymous="true"'
+      };
+    }
+    return post;
+  });
+}
+
+/**
+ * Flow will catch this error - wrong return type
+ */
+function getBadExample(): string {
+  // This would be caught by Flow as a type error:
+  // return 42; // Error: number is not compatible with string
+  return "correct string return";
+}
+
+/**
+ * Flow catches parameter type mismatches
+ */
+function validateInput(input: string): boolean {
+  // Flow ensures input is always a string
+  return input.length > 0;
+}
+
+// Example usage that Flow would validate:
+const examplePost: PostObject = {
+  pid: '123',
+  tid: '456', 
+  uid: 1,
+  content: 'Test post content',
+  timestamp: Date.now(),
+  anonymous: true
+};
+
+const exampleUser: UserInfo = {
+  uid: 1,
+  username: 'testuser',
+  displayname: 'Test User'
+};
+
+// Flow validates these function calls match the type signatures:
+const isAnonymous: boolean = checkAnonymousFlag({
+  anonymous: true,
+  content: 'test',
+  tid: '123'
+});
+
+const maskedUser: UserInfo = maskUserInfo(exampleUser);
+const processedPosts: Array<PostObject> = processPostsList([examplePost]);
+
+module.exports = {
+  checkAnonymousFlag,
+  maskUserInfo,
+  processPostsList,
+  validateInput
+};

@@ -1,0 +1,164 @@
+Error --------------------------------------------------------------------------------- src/flow-annotated-demo.js:109:2
+
+Suppression is missing a code. Please update this suppression to use an error code: `$FlowFixMe[<CODE>]` [InferError]
+
+   109| 	// $FlowExpectedError
+         ^^^^^^^^^^^^^^^^^^^^^
+
+
+Error -------------------------------------------------------------------------------- src/flow-annotated-demo.js:110:32
+
+Cannot call `validatePostId` with `123` bound to `pid` because number [1] is incompatible with string [2].
+[incompatible-type]
+
+   src/flow-annotated-demo.js:110:32
+   110| 	const result = validatePostId(123);
+                                       ^^^ [1]
+
+References:
+   src/flow-annotated-demo.js:61:30
+    61| function validatePostId(pid: string): boolean {
+                                     ^^^^^^ [2]
+
+
+Error ------------------------------------------------------------------------------------------- src/flow-demo.js:12:29
+
+Cannot build a typed interface for this module. You should annotate the exports of this module with types. Missing type
+annotation at identifier: [signature-verification-failure]
+
+   12| function checkAnonymousFlag(data) {
+                                   ^^^^
+
+
+Error ------------------------------------------------------------------------------------------- src/flow-demo.js:12:29
+
+Missing an annotation on `data`. [missing-local-annot]
+
+   12| function checkAnonymousFlag(data) {
+                                   ^^^^
+
+
+Error ------------------------------------------------------------------------------------------- src/flow-demo.js:12:34
+
+Cannot build a typed interface for this module. You should annotate the exports of this module with types. Missing type
+annotation at function return: [signature-verification-failure]
+
+   12| function checkAnonymousFlag(data) {
+                                        
+
+
+Error ------------------------------------------------------------------------------------------- src/flow-demo.js:21:23
+
+Cannot build a typed interface for this module. You should annotate the exports of this module with types. Missing type
+annotation at identifier: [signature-verification-failure]
+
+   21| function maskUserInfo(user) {
+                             ^^^^
+
+
+Error ------------------------------------------------------------------------------------------- src/flow-demo.js:21:23
+
+Missing an annotation on `user`. [missing-local-annot]
+
+   21| function maskUserInfo(user) {
+                             ^^^^
+
+
+Error ------------------------------------------------------------------------------------------- src/flow-demo.js:21:28
+
+Cannot build a typed interface for this module. You should annotate the exports of this module with types. Missing type
+annotation at function return: [signature-verification-failure]
+
+   21| function maskUserInfo(user) {
+                                  
+
+
+Error ------------------------------------------------------------------------------------------- src/flow-demo.js:32:25
+
+Cannot build a typed interface for this module. You should annotate the exports of this module with types. Missing type
+annotation at identifier: [signature-verification-failure]
+
+   32| function validatePostId(pid) {
+                               ^^^
+
+
+Error ------------------------------------------------------------------------------------------- src/flow-demo.js:32:25
+
+Missing an annotation on `pid`. [missing-local-annot]
+
+   32| function validatePostId(pid) {
+                               ^^^
+
+
+Error ------------------------------------------------------------------------------------------- src/flow-demo.js:32:29
+
+Cannot build a typed interface for this module. You should annotate the exports of this module with types. Missing type
+annotation at function return: [signature-verification-failure]
+
+   32| function validatePostId(pid) {
+                                   
+
+
+Error ------------------------------------------------------------------------------------------- src/flow-demo.js:42:31
+
+Cannot build a typed interface for this module. You should annotate the exports of this module with types. Missing type
+annotation at identifier: [signature-verification-failure]
+
+   42| function generateCheckboxHtml(id) {
+                                     ^^
+
+
+Error ------------------------------------------------------------------------------------------- src/flow-demo.js:42:31
+
+Missing an annotation on `id`. [missing-local-annot]
+
+   42| function generateCheckboxHtml(id) {
+                                     ^^
+
+
+Error ------------------------------------------------------------------------------------------- src/flow-demo.js:42:34
+
+Cannot build a typed interface for this module. You should annotate the exports of this module with types. Missing type
+annotation at function return: [signature-verification-failure]
+
+   42| function generateCheckboxHtml(id) {
+                                        
+
+
+Error ------------------------------------------------------------------------------------------- src/flow-demo.js:62:25
+
+Cannot build a typed interface for this module. You should annotate the exports of this module with types. Missing type
+annotation at identifier: [signature-verification-failure]
+
+   62| function calculateStats(posts) {
+                               ^^^^^
+
+
+Error ------------------------------------------------------------------------------------------- src/flow-demo.js:62:25
+
+Missing an annotation on `posts`. [missing-local-annot]
+
+   62| function calculateStats(posts) {
+                               ^^^^^
+
+
+Error ------------------------------------------------------------------------------------------- src/flow-demo.js:62:31
+
+Cannot build a typed interface for this module. You should annotate the exports of this module with types. Missing type
+annotation at function return: [signature-verification-failure]
+
+   62| function calculateStats(posts) {
+                                     
+
+
+Error ------------------------------------------------------------------------------------------- src/flow-demo.js:75:32
+
+Cannot build a typed interface for this module. You should annotate the exports of this module with types. Missing type
+annotation at function return: [signature-verification-failure]
+
+   75| function demonstrateTypeError() {
+                                      
+
+
+
+Found 18 errors
