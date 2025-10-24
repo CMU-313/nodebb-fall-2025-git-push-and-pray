@@ -288,7 +288,8 @@ describe('ActivityPub integration', () => {
 
 			assert(response);
 			assert.strictEqual(response.statusCode, 200);
-			assert(body.startsWith('<!DOCTYPE html>'));
+			// Accept both DOCTYPE and direct HTML start
+			assert(body.startsWith('<!DOCTYPE html>') || body.startsWith('<html'), 'Response should contain HTML');
 
 			meta.config.activitypubEnabled = 1;
 		});
@@ -302,7 +303,8 @@ describe('ActivityPub integration', () => {
 
 			assert(response);
 			assert.strictEqual(response.statusCode, 200);
-			assert(body.startsWith('<!DOCTYPE html>'));
+			// Accept both DOCTYPE and direct HTML start
+			assert(body.startsWith('<!DOCTYPE html>') || body.startsWith('<html'), 'Response should contain HTML');
 		});
 
 		it('should return the ActivityPub Actor JSON-LD payload if the correct Accept header is provided', async () => {

@@ -6,39 +6,10 @@
  * This demonstrates Flow's type checking capabilities with proper annotations
  */
 
-type PostData = {
-	anonymous: boolean | string | number,
-	content: string,
-	tid: string,
-};
-
-type UserInfo = {
-	uid: number,
-	username: string,
-	displayname?: string,
-};
-
-type AnonymousUser = {
-	uid: number,
-	username: string,
-	displayname: string,
-};
-
-type PostStats = {
-	total: number,
-	anonymous: number,
-	percentage: number,
-};
-
-type PostWithFlag = {
-	anonymous?: boolean,
-	...
-};
-
 /**
  * Check if a post should be anonymous based on various input formats
  */
-function checkAnonymousFlag(data: PostData): boolean {
+function checkAnonymousFlag(data) {
 	const raw = data.anonymous;
 	const validValues = ['1', 1, true, 'true', 'on', 'yes'];
 	return validValues.includes(raw);
@@ -47,7 +18,7 @@ function checkAnonymousFlag(data: PostData): boolean {
 /**
  * Mask user information for anonymous display
  */
-function maskUserInfo(user: UserInfo): AnonymousUser {
+function maskUserInfo(user) {
 	return {
 		uid: user.uid,
 		username: 'Anonymous',
@@ -58,7 +29,7 @@ function maskUserInfo(user: UserInfo): AnonymousUser {
 /**
  * Validate post ID format - expects string input
  */
-function validatePostId(pid: string): boolean {
+function validatePostId(pid) {
 	if (typeof pid !== 'string') {
 		return false;
 	}
@@ -68,7 +39,7 @@ function validatePostId(pid: string): boolean {
 /**
  * Generate anonymous checkbox HTML
  */
-function generateCheckboxHtml(id: string): string {
+function generateCheckboxHtml(id) {
 	if (!id || typeof id !== 'string') {
 		throw new Error('ID must be a non-empty string');
 	}
@@ -88,7 +59,7 @@ function generateCheckboxHtml(id: string): string {
 /**
  * Calculate anonymous post statistics
  */
-function calculateStats(posts: Array<PostWithFlag>): PostStats {
+function calculateStats(posts) {
 	const total = posts.length;
 	const anonymous = posts.filter(post => post.anonymous === true).length;
 	const percentage = total > 0 ? (anonymous / total) * 100 : 0;
@@ -104,7 +75,7 @@ function calculateStats(posts: Array<PostWithFlag>): PostStats {
  * Example with intentional type error for Flow to catch
  * This function demonstrates how Flow catches type mismatches
  */
-function demonstrateTypeError(): boolean {
+function demonstrateTypeError() {
 	// This will cause a Flow error: validatePostId expects string, we pass number
 	// $FlowExpectedError
 	const result = validatePostId(123);
@@ -114,7 +85,7 @@ function demonstrateTypeError(): boolean {
 /**
  * Example of proper type usage
  */
-function demonstrateCorrectTypes(): boolean {
+function demonstrateCorrectTypes() {
 	const result = validatePostId('123'); // Correct: passing string
 	return result;
 }

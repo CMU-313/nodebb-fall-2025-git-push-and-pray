@@ -176,7 +176,6 @@
         "coveralls": "3.1.1",
         "eslint": "^9.37.0",
         "eslint-config-nodebb": "1.1.5",
-        "eslint-plugin-flowtype": "^8.0.3",
         "eslint-plugin-import": "2.31.0",
         "flow-bin": "^0.289.0",
         "grunt": "1.6.1",
