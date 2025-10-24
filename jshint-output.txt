@@ -1,0 +1,119 @@
+time="2025-10-23T20:18:19-04:00" level=warning msg="/home/team08/nodebb-fall-2025-git-push-and-pray/docker-compose-redis.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+[31mERROR[0m: Can't open src/user.js
+[31mERROR[0m: Can't open src/database.js
+app.js: line 20, col 1, Use the function form of "use strict".
+app.js: line 24, col 1, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+app.js: line 30, col 1, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+app.js: line 31, col 1, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+app.js: line 33, col 1, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+app.js: line 39, col 1, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+app.js: line 41, col 1, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+app.js: line 43, col 1, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+app.js: line 52, col 18, 'template literal syntax' is only available in ES6 (use 'esversion: 6').
+app.js: line 22, col 1, 'require' is not defined.
+app.js: line 24, col 15, 'require' is not defined.
+app.js: line 30, col 17, 'require' is not defined.
+app.js: line 31, col 14, 'require' is not defined.
+app.js: line 33, col 14, 'require' is not defined.
+app.js: line 43, col 18, 'require' is not defined.
+app.js: line 59, col 5, 'require' is not defined.
+app.js: line 61, col 5, 'require' is not defined.
+app.js: line 63, col 5, 'require' is not defined.
+app.js: line 65, col 5, 'require' is not defined.
+app.js: line 73, col 5, 'require' is not defined.
+app.js: line 75, col 5, 'require' is not defined.
+app.js: line 77, col 5, 'require' is not defined.
+app.js: line 79, col 5, 'require' is not defined.
+app.js: line 81, col 5, 'require' is not defined.
+app.js: line 35, col 1, 'process' is not defined.
+app.js: line 35, col 24, 'process' is not defined.
+app.js: line 36, col 14, 'process' is not defined.
+app.js: line 50, col 6, 'process' is not defined.
+app.js: line 36, col 1, 'global' is not defined.
+app.js: line 39, col 33, '__dirname' is not defined.
+
+30 errors
+
+time="2025-10-23T20:18:28-04:00" level=warning msg="/home/team08/nodebb-fall-2025-git-push-and-pray/docker-compose-redis.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+nodebb-plugin-anonymous-checkbox/library.js: line 1, col 1, Use the function form of "use strict".
+nodebb-plugin-anonymous-checkbox/library.js: line 3, col 1, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 5, col 1, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 6, col 1, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 7, col 1, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 10, col 1, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 15, col 27, 'async functions' is only available in ES8 (use 'esversion: 8').
+nodebb-plugin-anonymous-checkbox/library.js: line 18, col 3, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 19, col 13, 'Optional chaining' is only available in ES11 (use 'esversion: 11').
+nodebb-plugin-anonymous-checkbox/library.js: line 19, col 19, 'Optional chaining' is only available in ES11 (use 'esversion: 11').
+nodebb-plugin-anonymous-checkbox/library.js: line 19, col 29, 'nullish coalescing' is only available in ES11 (use 'esversion: 11').
+nodebb-plugin-anonymous-checkbox/library.js: line 20, col 13, 'Optional chaining' is only available in ES11 (use 'esversion: 11').
+nodebb-plugin-anonymous-checkbox/library.js: line 20, col 19, 'Optional chaining' is only available in ES11 (use 'esversion: 11').
+nodebb-plugin-anonymous-checkbox/library.js: line 20, col 24, 'Optional chaining' is only available in ES11 (use 'esversion: 11').
+nodebb-plugin-anonymous-checkbox/library.js: line 20, col 30, 'Optional chaining' is only available in ES11 (use 'esversion: 11').
+nodebb-plugin-anonymous-checkbox/library.js: line 22, col 3, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 23, col 15, 'template literal syntax' is only available in ES6 (use 'esversion: 6').
+nodebb-plugin-anonymous-checkbox/library.js: line 23, col 87, 'Optional chaining' is only available in ES11 (use 'esversion: 11').
+nodebb-plugin-anonymous-checkbox/library.js: line 23, col 93, 'Optional chaining' is only available in ES11 (use 'esversion: 11').
+nodebb-plugin-anonymous-checkbox/library.js: line 34, col 25, 'async functions' is only available in ES8 (use 'esversion: 8').
+nodebb-plugin-anonymous-checkbox/library.js: line 34, col 40, 'destructuring binding' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 36, col 12, 'Optional chaining' is only available in ES11 (use 'esversion: 11').
+nodebb-plugin-anonymous-checkbox/library.js: line 37, col 3, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 39, col 29, 'template literal syntax' is only available in ES6 (use 'esversion: 6').
+nodebb-plugin-anonymous-checkbox/library.js: line 44, col 15, 'template literal syntax' is only available in ES6 (use 'esversion: 6').
+nodebb-plugin-anonymous-checkbox/library.js: line 50, col 23, 'async functions' is only available in ES8 (use 'esversion: 8').
+nodebb-plugin-anonymous-checkbox/library.js: line 55, col 17, 'template literal syntax' is only available in ES6 (use 'esversion: 6').
+nodebb-plugin-anonymous-checkbox/library.js: line 61, col 15, 'template literal syntax' is only available in ES6 (use 'esversion: 6').
+nodebb-plugin-anonymous-checkbox/library.js: line 68, col 24, 'async functions' is only available in ES8 (use 'esversion: 8').
+nodebb-plugin-anonymous-checkbox/library.js: line 71, col 3, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 71, col 17, 'Optional chaining' is only available in ES11 (use 'esversion: 11').
+nodebb-plugin-anonymous-checkbox/library.js: line 74, col 17, 'template literal syntax' is only available in ES6 (use 'esversion: 6').
+nodebb-plugin-anonymous-checkbox/library.js: line 84, col 30, 'async functions' is only available in ES8 (use 'esversion: 8').
+nodebb-plugin-anonymous-checkbox/library.js: line 88, col 29, 'async functions' is only available in ES8 (use 'esversion: 8').
+nodebb-plugin-anonymous-checkbox/library.js: line 93, col 1, 'async functions' is only available in ES8 (use 'esversion: 8').
+nodebb-plugin-anonymous-checkbox/library.js: line 95, col 3, 'let' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 96, col 8, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 96, col 16, 'for of' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 102, col 27, 'template literal syntax' is only available in ES6 (use 'esversion: 6').
+nodebb-plugin-anonymous-checkbox/library.js: line 110, col 31, 'async functions' is only available in ES8 (use 'esversion: 8').
+nodebb-plugin-anonymous-checkbox/library.js: line 113, col 3, 'let' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 114, col 8, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 114, col 16, 'for of' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 120, col 27, 'template literal syntax' is only available in ES6 (use 'esversion: 6').
+nodebb-plugin-anonymous-checkbox/library.js: line 127, col 30, 'async functions' is only available in ES8 (use 'esversion: 8').
+nodebb-plugin-anonymous-checkbox/library.js: line 129, col 3, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 129, col 3, 'destructuring binding' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 132, col 17, 'template literal syntax' is only available in ES6 (use 'esversion: 6').
+nodebb-plugin-anonymous-checkbox/library.js: line 137, col 31, 'async functions' is only available in ES8 (use 'esversion: 8').
+nodebb-plugin-anonymous-checkbox/library.js: line 139, col 3, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 139, col 3, 'destructuring binding' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 142, col 17, 'template literal syntax' is only available in ES6 (use 'esversion: 6').
+nodebb-plugin-anonymous-checkbox/library.js: line 150, col 30, 'async functions' is only available in ES8 (use 'esversion: 8').
+nodebb-plugin-anonymous-checkbox/library.js: line 152, col 3, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 152, col 3, 'destructuring binding' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 154, col 38, 'template literal syntax' is only available in ES6 (use 'esversion: 6').
+nodebb-plugin-anonymous-checkbox/library.js: line 171, col 29, 'async functions' is only available in ES8 (use 'esversion: 8').
+nodebb-plugin-anonymous-checkbox/library.js: line 173, col 3, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 173, col 3, 'destructuring binding' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 175, col 37, 'arrow function syntax (=>)' is only available in ES6 (use 'esversion: 6').
+nodebb-plugin-anonymous-checkbox/library.js: line 185, col 28, 'async functions' is only available in ES8 (use 'esversion: 8').
+nodebb-plugin-anonymous-checkbox/library.js: line 187, col 3, 'const' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 187, col 3, 'destructuring binding' is available in ES6 (use 'esversion: 6') or Mozilla JS extensions (use moz).
+nodebb-plugin-anonymous-checkbox/library.js: line 189, col 37, 'arrow function syntax (=>)' is only available in ES6 (use 'esversion: 6').
+nodebb-plugin-anonymous-checkbox/library.js: line 203, col 11, 'Optional chaining' is only available in ES11 (use 'esversion: 11').
+nodebb-plugin-anonymous-checkbox/library.js: line 203, col 31, 'Optional chaining' is only available in ES11 (use 'esversion: 11').
+nodebb-plugin-anonymous-checkbox/library.js: line 203, col 53, 'Optional chaining' is only available in ES11 (use 'esversion: 11').
+nodebb-plugin-anonymous-checkbox/library.js: line 3, col 12, 'require' is not defined.
+nodebb-plugin-anonymous-checkbox/library.js: line 10, col 27, 'process' is not defined.
+nodebb-plugin-anonymous-checkbox/library.js: line 23, col 3, 'console' is not defined.
+nodebb-plugin-anonymous-checkbox/library.js: line 44, col 3, 'console' is not defined.
+nodebb-plugin-anonymous-checkbox/library.js: line 55, col 5, 'console' is not defined.
+nodebb-plugin-anonymous-checkbox/library.js: line 61, col 3, 'console' is not defined.
+nodebb-plugin-anonymous-checkbox/library.js: line 74, col 5, 'console' is not defined.
+nodebb-plugin-anonymous-checkbox/library.js: line 102, col 15, 'console' is not defined.
+nodebb-plugin-anonymous-checkbox/library.js: line 120, col 15, 'console' is not defined.
+nodebb-plugin-anonymous-checkbox/library.js: line 132, col 5, 'console' is not defined.
+nodebb-plugin-anonymous-checkbox/library.js: line 142, col 5, 'console' is not defined.
+nodebb-plugin-anonymous-checkbox/library.js: line 235, col 1, 'module' is not defined.
+
+79 errors
+

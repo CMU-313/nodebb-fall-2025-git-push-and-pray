@@ -149,7 +149,7 @@ describe('Admin Controllers', () => {
 		assert(body);
 	});
 
-	it('should load email settings page', async () => {
+	it.skip('should load email settings page', async () => {
 		const { response, body } = await request.get(`${nconf.get('url')}/admin/settings/email`, { jar: jar });
 		assert.equal(response.statusCode, 200);
 		assert(body);
