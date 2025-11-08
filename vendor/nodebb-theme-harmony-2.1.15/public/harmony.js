@@ -295,4 +295,25 @@ $(document).ready(function () {
 		mainNavEl.on('shown.bs.dropdown', toggleOverflow)
 			.on('hidden.bs.dropdown', toggleOverflow);
 	}
+
+	// Configure translate button toggle for posts
+	require(['hooks'], function (hooks) {
+		hooks.on('action:topic.loaded', function () {
+			configurePostToggle();
+		});
+	});
+
+	function configurePostToggle() {
+		$('.topic').on('click', '.view-translated-btn', function () {
+			// Toggle the visibility of the next .translated-content div
+			$(this).closest('.sensitive-content-message').next('.translated-content').toggle();
+			// Optionally, change the button text based on visibility
+			var isVisible = $(this).closest('.sensitive-content-message').next('.translated-content').is(':visible');
+			if (isVisible) {
+				$(this).text('Hide the translated message.');
+			} else {
+				$(this).text('Click here to view the translated message.');
+			}
+		});
+	}
 });
