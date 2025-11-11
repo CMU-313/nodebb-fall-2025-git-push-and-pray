@@ -70,9 +70,15 @@ function modifyPost(post, fields) {
 		if (!fields.length || fields.includes('attachments')) {
 			post.attachments = (post.attachments || '').split(',').filter(Boolean);
 		}
-		// Mark post as "English" if decided by translator service or if it has no info
-		post.isEnglish = post.isEnglish == 'true' || post.isEnglish === undefined;
-		// If translatedContent is undefined, default to empty string (no translation needed for English posts)
+		// Handle isEnglish field - convert from database storage
+		if (post.isEnglish !== undefined) {
+			// Handle both boolean and string values from database
+			post.isEnglish = post.isEnglish === true || post.isEnglish === 'true';
+		} else {
+			// Default to true (English) for old posts without translation data
+			post.isEnglish = true;
+		}
+		// If translatedContent is undefined, default to empty string
 		if (post.translatedContent === undefined) {
 			post.translatedContent = '';
 		}
