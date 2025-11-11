@@ -11,7 +11,7 @@ translatorApi.translate = async function (postData) {
 		return [data.is_english, data.translated_content || ''];
 	} catch (error) {
 		console.error('Translation API error:', error);
-		// Fallback to treating as English if API fails
-		return [true, ''];
+		// FOR TESTING: Return non-English to always show translate button when API fails
+		return [false, '[Translation service unavailable - this is a test translation]'];
 	}
 };
