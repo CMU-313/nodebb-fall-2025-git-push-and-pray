@@ -1,0 +1,16 @@
+{
+    "url": "http://localhost:4567",
+    "secret": "changeme",
+    "database": "redis",
+    "redis": {
+        "host": "redis",
+        "port": 6379,
+        "password": "",
+        "database": 0
+    },
+    "admin": {
+        "username": "admin",
+        "email": "admin@example.com",
+        "password": "password"
+    }
+}

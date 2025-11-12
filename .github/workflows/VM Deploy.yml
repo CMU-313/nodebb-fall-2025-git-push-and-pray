@@ -33,4 +33,6 @@ jobs:
             cd ${{ secrets.REPO_NAME }}
             git pull origin main
             docker compose -f docker-compose-redis.yml down
-            docker compose -f docker-compose-redis.yml up --build -d
+            docker compose -f docker-compose-redis.yml build --no-cache
+            START_BUILD=true docker compose -f docker-compose-redis.yml up -d
+
