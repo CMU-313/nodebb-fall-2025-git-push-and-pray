@@ -40,7 +40,9 @@ services:
       - '4567:4567' # comment this out if you don't want to expose NodeBB to the host, or change the first number to any port you want
     environment:
       - START_BUILD=true
-      - TRANSLATOR_API_URL=http://172.17.0.3:5000
+      - TRANSLATOR_API_URL=http://translator:5050
+    depends_on:
+      - translator
     volumes:
       - nodebb-build:/usr/src/app/build
       - nodebb-uploads:/usr/src/app/public/uploads
